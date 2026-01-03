@@ -88,4 +88,39 @@ export default function ShareButton({
           <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-lg shadow-lg border border-border z-50 py-2">
             <button
               onClick={handleCopyLink}
-              className="w-full px-4 py-2 t
+              className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-3"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-4 h-4 text-success" />
+                  <span className="text-success">Link copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-4 h-4 text-muted-foreground" />
+                  <span>Copy link</span>
+                </>
+              )}
+            </button>
+            
+            <button
+              onClick={handleFacebookShare}
+              className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-3"
+            >
+              <Facebook className="w-4 h-4 text-[#1877F2]" />
+              <span>Share on Facebook</span>
+            </button>
+            
+            <button
+              onClick={handleTwitterShare}
+              className="w-full px-4 py-2 text-left hover:bg-muted transition-colors flex items-center gap-3"
+            >
+              <Twitter className="w-4 h-4 text-black" />
+              <span>Share on Twitter</span>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
