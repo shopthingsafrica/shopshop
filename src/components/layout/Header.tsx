@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import {
   Search,
@@ -69,9 +70,14 @@ export default function Header() {
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <Link href="/" className="flex-shrink-0">
-            <span className="text-2xl font-heading font-bold text-primary">
-              Shop<span className="text-secondary">Things</span>
-            </span>
+            <Image
+              src="/images/logo.jpeg"
+              alt="ShopThings"
+              width={140}
+              height={40}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
           
           {/* Search bar - Desktop */}

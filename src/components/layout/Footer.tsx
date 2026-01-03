@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { 
   Facebook, 
   Instagram, 
@@ -57,7 +58,13 @@ export default function Footer() {
           {/* Brand section */}
           <div className="lg:col-span-1">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-heading font-bold">
+              <Image
+                src="/images/logo.jpeg"
+                alt="ShopThings"
+                width={140}
+                height={40}
+                className="h-10 w-auto brightness-0 invert"
+              />
                 Shop<span className="text-secondary">Things</span>
               </span>
             </Link>

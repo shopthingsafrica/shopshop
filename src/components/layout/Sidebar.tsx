@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { 
   LayoutDashboard,
@@ -82,11 +83,21 @@ export default function Sidebar({
         <div className="p-4 border-b border-white/10">
           <Link href="/" className="block">
             {isCollapsed ? (
-              <span className="text-2xl font-heading font-bold text-secondary block text-center">S</span>
+              <Image
+                src="/images/logo.jpeg"
+                alt="ShopThings"
+                width={40}
+                height={40}
+                className="h-8 w-8 mx-auto brightness-0 invert"
+              />
             ) : (
-              <span className="text-xl font-heading font-bold">
-                Shop<span className="text-secondary">Things</span>
-              </span>
+              <Image
+                src="/images/logo.jpeg"
+                alt="ShopThings"
+                width={120}
+                height={36}
+                className="h-9 w-auto brightness-0 invert"
+              />
             )}
           </Link>
         </div>

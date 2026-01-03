@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui';
 
@@ -14,9 +15,13 @@ export default function AuthLayout({
         <div className="absolute inset-0 bg-[url('/hero-pattern.svg')] opacity-10" />
         <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-heading font-bold">
-              Shop<span className="text-secondary">Things</span>
-            </span>
+            <Image
+              src="/images/logo.jpeg"
+              alt="ShopThings"
+              width={140}
+              height={40}
+              className="h-10 w-auto brightness-0 invert"
+            />
           </Link>
           
           <div className="flex-1 flex flex-col justify-center max-w-md">
