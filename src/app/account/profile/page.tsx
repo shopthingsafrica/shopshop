@@ -182,13 +182,16 @@ export default function ProfilePage() {
                 {/* Avatar */}
                 <div className="flex items-center gap-6 mb-8 pb-8 border-b border-border">
                   <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-gradient-to-br from-secondary to-primary flex items-center justify-center">
+                    <div className="w-24 h-24 rounded-full bg-linear-to-br from-secondary to-primary flex items-center justify-center">
                       <span className="text-3xl font-bold text-white">
                         {MOCK_USER.first_name.charAt(0)}{MOCK_USER.last_name.charAt(0)}
                       </span>
                     </div>
                     {isEditing && (
-                      <button className="absolute bottom-0 right-0 w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-secondary/90 transition-colors">
+                      <button 
+                        className="absolute bottom-0 right-0 w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-secondary/90 transition-colors"
+                        aria-label="Change profile picture"
+                      >
                         <Camera className="w-4 h-4" />
                       </button>
                     )}
@@ -318,6 +321,7 @@ export default function ProfilePage() {
                             type="button"
                             onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            aria-label={showCurrentPassword ? "Hide password" : "Show password"}
                           >
                             {showCurrentPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                           </button>
@@ -337,6 +341,7 @@ export default function ProfilePage() {
                             type="button"
                             onClick={() => setShowNewPassword(!showNewPassword)}
                             className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            aria-label={showNewPassword ? "Hide password" : "Show password"}
                           >
                             {showNewPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                           </button>
