@@ -218,7 +218,7 @@ export default function HelpPage() {
         {filteredFaqs && (
           <div className="mb-12">
             <h2 className="text-lg font-semibold mb-4">
-              {filteredFaqs.length} result{filteredFaqs.length !== 1 ? 's' : ''} for "{searchQuery}"
+              {filteredFaqs.length} result{filteredFaqs.length !== 1 ? 's' : ''} for &quot;{searchQuery}&quot;
             </h2>
             {filteredFaqs.length > 0 ? (
               <div className="space-y-3">
@@ -376,7 +376,7 @@ export default function HelpPage() {
               </div>
               <h3 className="text-lg font-semibold mb-2">Message Sent!</h3>
               <p className="text-muted-foreground">
-                We'll get back to you within 24 hours.
+                We&apos;ll get back to you within 24 hours.
               </p>
             </div>
           ) : (

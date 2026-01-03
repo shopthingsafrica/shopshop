@@ -365,13 +365,11 @@ export default function AddressesPage() {
 
               {/* Default Address */}
               <div className="md:col-span-2">
-                <label className="flex items-center gap-3 cursor-pointer">
-                  <Checkbox
-                    checked={formData.is_default}
-                    onChange={(e) => setFormData({ ...formData, is_default: e.target.checked })}
-                  />
-                  <span className="text-sm font-medium">Set as default address</span>
-                </label>
+                <Checkbox
+                  label="Set as default address"
+                  checked={formData.is_default}
+                  onChange={(e) => setFormData({ ...formData, is_default: e.target.checked })}
+                />
               </div>
             </div>
 

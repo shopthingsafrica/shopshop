@@ -55,7 +55,7 @@ export default function WishlistPage() {
 
   const handleAddToCart = (item: typeof MOCK_WISHLIST[0]) => {
     addItem({
-      id: `cart-${item.productId}-${Date.now()}`,
+      id: `cart-${item.productId}`,
       quantity: 1,
       product: {
         id: item.productId,

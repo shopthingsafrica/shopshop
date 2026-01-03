@@ -15,7 +15,7 @@ import { Button } from '@/components/ui';
 
 function ConfirmationContent() {
   const searchParams = useSearchParams();
-  const orderId = searchParams.get('order') || 'ORD-' + Date.now();
+  const orderId = searchParams.get('order') || 'ORD-DEFAULT';
 
   return (
     <div className="min-h-screen bg-muted flex items-center justify-center px-4 py-12">

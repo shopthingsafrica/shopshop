@@ -209,10 +209,10 @@ export default function TwoFactorSetupPage() {
                     <div className="w-48 h-48 bg-muted rounded-xl flex items-center justify-center border-2 border-dashed border-border">
                       <div className="text-center">
                         <div className="grid grid-cols-5 gap-1 p-4">
-                          {[...Array(25)].map((_, i) => (
+                          {[1,0,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1].map((v, i) => (
                             <div 
                               key={i} 
-                              className={`w-6 h-6 ${Math.random() > 0.5 ? 'bg-primary' : 'bg-white'}`}
+                              className={`w-6 h-6 ${v ? 'bg-primary' : 'bg-white'}`}
                             />
                           ))}
                         </div>
@@ -259,7 +259,7 @@ export default function TwoFactorSetupPage() {
                   <div>
                     <h2 className="text-lg font-semibold">Set up SMS Verification</h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                      We'll send verification codes to your phone number
+                      We&apos;ll send verification codes to your phone number
                     </p>
                   </div>
 
@@ -282,7 +282,7 @@ export default function TwoFactorSetupPage() {
                   <div>
                     <h2 className="text-lg font-semibold">Set up Email Verification</h2>
                     <p className="text-sm text-muted-foreground mt-1">
-                      We'll send verification codes to your email address
+                      We&apos;ll send verification codes to your email address
                     </p>
                   </div>
 
@@ -353,7 +353,7 @@ export default function TwoFactorSetupPage() {
 
               {method !== 'authenticator' && (
                 <p className="text-center text-sm text-muted-foreground">
-                  Didn't receive the code?{' '}
+                  Didn&apos;t receive the code?{' '}
                   <button className="text-secondary hover:underline">
                     Resend
                   </button>
@@ -428,7 +428,7 @@ export default function TwoFactorSetupPage() {
                 className="w-full"
                 onClick={handleComplete}
               >
-                I've Saved My Codes
+                I&apos;ve Saved My Codes
               </Button>
             </div>
           )}
@@ -450,7 +450,7 @@ export default function TwoFactorSetupPage() {
               <div className="bg-muted rounded-lg p-4 text-left">
                 <h3 className="font-medium mb-2">What happens next?</h3>
                 <ul className="text-sm text-muted-foreground space-y-2">
-                  <li>• You'll be asked for a verification code when you sign in</li>
+                  <li>• You&apos;ll be asked for a verification code when you sign in</li>
                   <li>• Use your {method === 'authenticator' ? 'authenticator app' : method === 'sms' ? 'phone' : 'email'} to get codes</li>
                   <li>• Use backup codes if you lose access to your {method === 'authenticator' ? 'authenticator' : method === 'sms' ? 'phone' : 'email'}</li>
                 </ul>
