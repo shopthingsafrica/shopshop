@@ -3,11 +3,11 @@
 import { useEffect, useState, useRef } from 'react';
 import { Send, ArrowLeft } from 'lucide-react';
 import { messagingService } from '@/lib/messaging';
-import type { Conversation, Message } from '@/types/messaging';
+import type { Conversation, Message, ConversationWithDetails } from '@/types/messaging';
 import { format, isToday, isYesterday } from 'date-fns';
 
 interface MessageThreadProps {
-  conversation: Conversation;
+  conversation: ConversationWithDetails;
   userId: string;
   isVendor?: boolean;
   onBack?: () => void;
@@ -130,9 +130,9 @@ export function MessageThread({
         )}
         
         <div className="flex items-center gap-3 flex-1">
-          {otherParty?.avatar_url || otherParty?.logo_url ? (
+          {(otherParty as any)?.avatar_url || (otherParty as any)?.logo_url ? (
             <img
-              src={otherParty.avatar_url || otherParty.logo_url}
+              src={(otherParty as any).avatar_url || (otherParty as any).logo_url}
               alt={otherPartyName}
               className="w-10 h-10 rounded-full object-cover"
             />
@@ -148,7 +148,7 @@ export function MessageThread({
             <h2 className="font-semibold text-foreground">{otherPartyName}</h2>
             {conversation.product && (
               <p className="text-xs text-muted-foreground">
-                Re: {conversation.product.name}
+                Re: {conversation.product.title}
               </p>
             )}
           </div>

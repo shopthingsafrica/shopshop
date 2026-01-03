@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/client';
-import type { Conversation, Message } from '@/types/messaging';
+import type { Conversation, Message, ConversationWithDetails } from '@/types/messaging';
 
 export class MessagingService {
   private supabase = createClient();
@@ -25,7 +25,7 @@ export class MessagingService {
   /**
    * Get all conversations for a user
    */
-  async getConversations(userId: string, isVendor: boolean = false): Promise<Conversation[]> {
+  async getConversations(userId: string, isVendor: boolean = false): Promise<ConversationWithDetails[]> {
     let query = this.supabase
       .from('conversations')
       .select(`
@@ -45,7 +45,7 @@ export class MessagingService {
         .single();
 
       if (vendorData) {
-        query = query.eq('vendor_id', vendorData.id);
+        query = query.eq('vendor_id', (vendorData as any).id);
       }
     } else {
       query = query.eq('buyer_id', userId);
@@ -54,7 +54,7 @@ export class MessagingService {
     const { data, error } = await query;
 
     if (error) throw error;
-    return data || [];
+    return (data as any) || [];
   }
 
   /**
@@ -71,7 +71,7 @@ export class MessagingService {
       .order('created_at', { ascending: true });
 
     if (error) throw error;
-    return data || [];
+    return (data as any) || [];
   }
 
   /**
@@ -92,7 +92,7 @@ export class MessagingService {
         content,
         is_from_buyer: isFromBuyer,
         attachments,
-      })
+      } as any)
       .select(`
         *,
         sender:profiles!sender_id(id, full_name, avatar_url)
@@ -100,7 +100,7 @@ export class MessagingService {
       .single();
 
     if (error) throw error;
-    return data;
+    return data as any;
   }
 
   /**
@@ -111,7 +111,7 @@ export class MessagingService {
       p_conversation_id: conversationId,
       p_user_id: userId,
       p_is_buyer: isBuyer,
-    });
+    } as any);
 
     if (error) throw error;
   }
@@ -145,7 +145,7 @@ export class MessagingService {
             .single();
 
           if (data) {
-            callback(data);
+            callback(data as any);
           }
         }
       )
@@ -178,7 +178,7 @@ export class MessagingService {
   async archiveConversation(conversationId: string, isBuyer: boolean): Promise<void> {
     const updateField = isBuyer ? 'is_archived_by_buyer' : 'is_archived_by_vendor';
     
-    const { error } = await this.supabase
+    const { error } = await (this.supabase as any)
       .from('conversations')
       .update({ [updateField]: true })
       .eq('id', conversationId);
@@ -202,7 +202,7 @@ export class MessagingService {
         .single();
 
       if (vendorData) {
-        query = query.eq('vendor_id', vendorData.id);
+        query = query.eq('vendor_id', (vendorData as any).id);
       }
     } else {
       query = query.eq('buyer_id', userId);
@@ -212,7 +212,7 @@ export class MessagingService {
 
     if (error) throw error;
 
-    const count = data?.reduce((sum, conv) => {
+    const count = (data as any)?.reduce((sum: number, conv: any) => {
       return sum + (isVendor ? conv.vendor_unread_count : conv.buyer_unread_count);
     }, 0) || 0;
 

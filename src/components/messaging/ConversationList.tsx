@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react';
 import { MessageCircle, Search } from 'lucide-react';
 import { messagingService } from '@/lib/messaging';
-import type { Conversation } from '@/types/messaging';
+import type { Conversation, ConversationWithDetails } from '@/types/messaging';
 import { formatDistanceToNow } from 'date-fns';
 
 interface ConversationListProps {
   userId: string;
   isVendor?: boolean;
-  onSelectConversation: (conversation: Conversation) => void;
+  onSelectConversation: (conversation: ConversationWithDetails) => void;
   selectedConversationId?: string;
 }
 
@@ -19,7 +19,7 @@ export function ConversationList({
   onSelectConversation,
   selectedConversationId,
 }: ConversationListProps) {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<ConversationWithDetails[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -146,7 +146,7 @@ export function ConversationList({
                     
                     {conversation.product && (
                       <p className="text-xs text-muted-foreground truncate mb-1">
-                        Re: {conversation.product.name}
+                        Re: {conversation.product.title}
                       </p>
                     )}
                     
