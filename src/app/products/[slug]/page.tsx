@@ -200,11 +200,34 @@ export default function ProductDetailPage() {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'specifications' | 'reviews'>('description');
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const product = MOCK_PRODUCT;
   const discountPercentage = product.compare_at_price 
     ? Math.round((1 - product.price / product.compare_at_price) * 100)
     : 0;
+
+  const productUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/products/${product.slug}` 
+    : `/products/${product.slug}`;
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(productUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
+
+  const openWhatsAppChat = () => {
+    const message = `Hi! I'm interested in "${product.name}" on ShopThings.\n${productUrl}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${product.vendor.whatsapp?.replace(/[^0-9]/g, '')}?text=${encodedMessage}`;
+    window.open(whatsappUrl, '_blank');
+  };
 
   const handleAddToCart = () => {
     addItem({
@@ -400,12 +423,26 @@ export default function ProductDetailPage() {
               </button>
 
               <button
+                onClick={() => setShowShareModal(true)}
                 className="p-3 border border-border rounded-lg hover:bg-muted transition-colors"
                 aria-label="Share product"
               >
                 <Share2 className="w-6 h-6" />
               </button>
             </div>
+
+            {/* WhatsApp Chat Button */}
+            {product.vendor.whatsapp && (
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full border-[#25D366] text-[#25D366] hover:bg-[#25D366] hover:text-white"
+                onClick={openWhatsAppChat}
+              >
+                <WhatsAppIcon className="w-5 h-5 mr-2" />
+                Chat with Seller on WhatsApp
+              </Button>
+            )}
 
             {/* Trust Badges */}
             <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border">
