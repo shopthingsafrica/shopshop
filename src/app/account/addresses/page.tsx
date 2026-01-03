@@ -224,6 +224,7 @@ export default function AddressesPage() {
               <button 
                 onClick={handleCancel}
                 className="p-2 hover:bg-muted rounded-lg transition-colors"
+                aria-label="Close form"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -463,6 +464,7 @@ export default function AddressesPage() {
                     <button
                       onClick={() => setShowDeleteConfirm(address.id)}
                       className="ml-auto p-2 text-error hover:bg-error/10 rounded-lg transition-colors"
+                      aria-label="Delete address"
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
