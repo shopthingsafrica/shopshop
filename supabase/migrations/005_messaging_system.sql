@@ -6,12 +6,16 @@
 -- ============================================
 -- 1. CREATE MESSAGE STATUS ENUM
 -- ============================================
-CREATE TYPE message_status AS ENUM ('sent', 'delivered', 'read');
+DO $$ BEGIN
+    CREATE TYPE message_status AS ENUM ('sent', 'delivered', 'read');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- ============================================
 -- 2. CREATE CONVERSATIONS TABLE
 -- ============================================
-CREATE TABLE conversations (
+CREATE TABLE IF NOT EXISTS conversations (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     buyer_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     vendor_id UUID NOT NULL REFERENCES vendors(id) ON DELETE CASCADE,
@@ -29,15 +33,15 @@ CREATE TABLE conversations (
 );
 
 -- Indexes for conversation queries
-CREATE INDEX idx_conversations_buyer_id ON conversations(buyer_id);
-CREATE INDEX idx_conversations_vendor_id ON conversations(vendor_id);
-CREATE INDEX idx_conversations_last_message_at ON conversations(last_message_at DESC);
-CREATE INDEX idx_conversations_product_id ON conversations(product_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_buyer_id ON conversations(buyer_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_vendor_id ON conversations(vendor_id);
+CREATE INDEX IF NOT EXISTS idx_conversations_last_message_at ON conversations(last_message_at DESC);
+CREATE INDEX IF NOT EXISTS idx_conversations_product_id ON conversations(product_id);
 
 -- ============================================
 -- 3. CREATE MESSAGES TABLE
 -- ============================================
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
     sender_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
@@ -53,10 +57,10 @@ CREATE TABLE messages (
 );
 
 -- Indexes for message queries
-CREATE INDEX idx_messages_conversation_id ON messages(conversation_id);
-CREATE INDEX idx_messages_sender_id ON messages(sender_id);
-CREATE INDEX idx_messages_created_at ON messages(created_at DESC);
-CREATE INDEX idx_messages_status ON messages(status);
+CREATE INDEX IF NOT EXISTS idx_messages_conversation_id ON messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_messages_sender_id ON messages(sender_id);
+CREATE INDEX IF NOT EXISTS idx_messages_created_at ON messages(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_messages_status ON messages(status);
 
 -- ============================================
 -- 4. CREATE FUNCTIONS
@@ -146,6 +150,9 @@ $$ LANGUAGE plpgsql;
 -- 5. CREATE TRIGGERS
 -- ============================================
 
+-- Drop trigger if exists before creating
+DROP TRIGGER IF EXISTS trigger_update_conversation_last_message ON messages;
+
 -- Trigger to update conversation when new message is sent
 CREATE TRIGGER trigger_update_conversation_last_message
     AFTER INSERT ON messages
@@ -159,6 +166,15 @@ CREATE TRIGGER trigger_update_conversation_last_message
 -- Enable RLS
 ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE messages ENABLE ROW LEVEL SECURITY;
+
+-- Drop existing policies if they exist
+DROP POLICY IF EXISTS "Buyers can view their conversations" ON conversations;
+DROP POLICY IF EXISTS "Vendors can view their conversations" ON conversations;
+DROP POLICY IF EXISTS "Buyers can create conversations" ON conversations;
+DROP POLICY IF EXISTS "Users can update conversation settings" ON conversations;
+DROP POLICY IF EXISTS "Users can view messages in their conversations" ON messages;
+DROP POLICY IF EXISTS "Users can send messages" ON messages;
+DROP POLICY IF EXISTS "Users can update message status" ON messages;
 
 -- Conversations policies
 -- Buyers can view their own conversations
