@@ -176,140 +176,52 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Fresh Finds / New Arrivals */}
+      {/* Curated Global Collections */}
       <section className="py-16 px-4">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary">
-                Fresh Finds
-              </h2>
-              <p className="text-muted-foreground mt-1">
-                Just arrived on ShopThings
-              </p>
-            </div>
-            <Link 
-              href="/products?sort=newest" 
-              className="hidden md:flex items-center text-secondary hover:text-secondary/80 font-medium transition-colors"
-            >
-              View All <ArrowRight className="w-4 h-4 ml-1" />
-            </Link>
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary">
+              Curated Global Collections
+            </h2>
           </div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            {FRESH_FINDS.map((product, index) => (
-              <div
-                key={index}
-                className="group bg-white rounded-xl overflow-hidden border border-border hover:shadow-lg transition-all duration-300"
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {CURATED_COLLECTIONS.map((collection) => (
+              <Link 
+                key={collection.slug}
+                href={`/collections/${collection.slug}`}
+                className="group relative aspect-[3/4] overflow-hidden rounded-xl"
               >
-                <div className="relative aspect-square bg-muted overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 flex items-center justify-center">
-                    <span className="text-4xl">🛍️</span>
-                  </div>
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-accent text-white text-xs font-bold px-2 py-1 rounded">
-                      NEW
-                    </span>
-                  </div>
+                <Image 
+                  src={collection.image}
+                  alt={collection.name}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                  <h3 className="text-lg font-semibold">{collection.name}</h3>
                 </div>
-                <div className="p-4">
-                  <p className="text-sm text-muted-foreground flex items-center">
-                    {product.vendor}
-                    <BadgeCheck className="w-3 h-3 ml-1 text-secondary" />
-                  </p>
-                  <h3 className="font-medium text-foreground mt-1 line-clamp-1 group-hover:text-secondary transition-colors">
-                    {product.name}
-                  </h3>
-                  <div className="flex items-center mt-1">
-                    <span className="text-warning text-sm">★</span>
-                    <span className="text-sm text-muted-foreground ml-1">{product.rating}</span>
-                  </div>
-                  <p className="text-lg font-bold text-primary mt-2">
-                    ₦{product.price.toLocaleString()}
-                  </p>
-                </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-r from-accent to-accent/90 text-white py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl md:text-4xl font-heading font-bold mb-4">
-            Start Selling on ShopThings
+      {/* Fresh Finds Section */}
+      <section className="py-16 px-4 bg-muted">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary mb-4">
+            Fresh Finds, Just For You
           </h2>
-          <p className="text-lg mb-8 text-white/90 max-w-2xl mx-auto">
-            Join thousands of African artisans and entrepreneurs. Share your craft with the world and grow your business.
+          <p className="text-muted-foreground mb-8">
+            Discover the latest arrivals from our verified sellers
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Link href="/vendor/register">
-              <Button variant="primary" size="lg" className="bg-white text-accent hover:bg-white/90">
-                Create Your Store
-              </Button>
-            </Link>
-            <Link href="/vendor/success-stories">
-              <Button variant="ghost" size="lg" className="text-white border border-white/30 hover:bg-white/10">
-                Success Stories
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Global Collections */}
-      <section className="py-16 px-4 bg-primary text-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold">
-              Curated Global Collections
-            </h2>
-            <p className="text-white/80 mt-2 max-w-2xl mx-auto">
-              Discover unique items from across Africa, carefully selected to bring the continent&apos;s rich heritage to your doorstep.
-            </p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center hover:bg-white/15 transition-colors">
-              <div className="w-20 h-20 bg-secondary/20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">
-                🌍
-              </div>
-              <h3 className="text-xl font-semibold mb-2">West African Treasures</h3>
-              <p className="text-white/70 mb-4">
-                Vibrant Ankara prints, Kente cloth, and traditional crafts from Nigeria, Ghana, and beyond.
-              </p>
-              <Link href="/collections/west-africa" className="text-secondary hover:underline">
-                Explore Collection →
-              </Link>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center hover:bg-white/15 transition-colors">
-              <div className="w-20 h-20 bg-secondary/20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">
-                🦁
-              </div>
-              <h3 className="text-xl font-semibold mb-2">East African Elegance</h3>
-              <p className="text-white/70 mb-4">
-                Maasai beadwork, Kikoy fabrics, and handcrafted jewelry from Kenya, Tanzania, and Ethiopia.
-              </p>
-              <Link href="/collections/east-africa" className="text-secondary hover:underline">
-                Explore Collection →
-              </Link>
-            </div>
-            
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 text-center hover:bg-white/15 transition-colors">
-              <div className="w-20 h-20 bg-secondary/20 rounded-full mx-auto mb-6 flex items-center justify-center text-4xl">
-                💎
-              </div>
-              <h3 className="text-xl font-semibold mb-2">Southern African Gems</h3>
-              <p className="text-white/70 mb-4">
-                Zulu beadwork, Ndebele art, and Cape Malay inspired products from the southern regions.
-              </p>
-              <Link href="/collections/south-africa" className="text-secondary hover:underline">
-                Explore Collection →
-              </Link>
-            </div>
-          </div>
+          <Link href="/products?sort=newest">
+            <Button variant="primary" size="lg">
+              Shop New Arrivals
+            </Button>
+          </Link>
         </div>
       </section>
     </>
