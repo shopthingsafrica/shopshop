@@ -36,18 +36,19 @@ export default function Home() {
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-black/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4 h-full flex items-center">
           <div className="max-w-2xl text-white">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 leading-tight animate-fade-in">
               Discover the Spirit of Africa
             </h1>
-            <p className="text-lg md:text-xl mb-8 leading-relaxed">
+            <p className="text-lg md:text-xl mb-10 leading-relaxed text-white/90 max-w-lg">
               Explore a curated selection of authentic crafts, fashion, and art from across the continent.
             </p>
             <Link href="/products">
-              <Button variant="secondary" size="lg">
+              <Button variant="secondary" size="lg" className="shadow-xl shadow-secondary/30 hover:scale-105 transition-transform">
                 Explore Now
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </div>
@@ -55,39 +56,39 @@ export default function Home() {
       </section>
 
       {/* Trust Badges */}
-      <section className="bg-muted py-8 border-b border-border">
+      <section className="bg-white py-10 border-b border-border/50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="p-2 bg-secondary/10 rounded-full">
-                <BadgeCheck className="w-6 h-6 text-secondary" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="flex items-center justify-center md:justify-start space-x-4 group">
+              <div className="p-3 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors duration-300">
+                <BadgeCheck className="w-7 h-7 text-secondary" />
               </div>
               <div>
                 <p className="font-semibold text-foreground">Verified Sellers</p>
                 <p className="text-sm text-muted-foreground">100% Authentic</p>
               </div>
             </div>
-            <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="p-2 bg-secondary/10 rounded-full">
-                <Truck className="w-6 h-6 text-secondary" />
+            <div className="flex items-center justify-center md:justify-start space-x-4 group">
+              <div className="p-3 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors duration-300">
+                <Truck className="w-7 h-7 text-secondary" />
               </div>
               <div>
                 <p className="font-semibold text-foreground">Global Shipping</p>
                 <p className="text-sm text-muted-foreground">Worldwide Delivery</p>
               </div>
             </div>
-            <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="p-2 bg-secondary/10 rounded-full">
-                <Shield className="w-6 h-6 text-secondary" />
+            <div className="flex items-center justify-center md:justify-start space-x-4 group">
+              <div className="p-3 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors duration-300">
+                <Shield className="w-7 h-7 text-secondary" />
               </div>
               <div>
                 <p className="font-semibold text-foreground">Secure Payments</p>
                 <p className="text-sm text-muted-foreground">Safe & Protected</p>
               </div>
             </div>
-            <div className="flex items-center justify-center md:justify-start space-x-3">
-              <div className="p-2 bg-secondary/10 rounded-full">
-                <HeartHandshake className="w-6 h-6 text-secondary" />
+            <div className="flex items-center justify-center md:justify-start space-x-4 group">
+              <div className="p-3 bg-secondary/10 rounded-xl group-hover:bg-secondary/20 transition-colors duration-300">
+                <HeartHandshake className="w-7 h-7 text-secondary" />
               </div>
               <div>
                 <p className="font-semibold text-foreground">Support Artisans</p>
@@ -99,30 +100,32 @@ export default function Home() {
       </section>
 
       {/* Featured Categories */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-gradient-to-b from-white to-muted/30">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary">
+          <div className="mb-10">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
               Featured Categories
             </h2>
+            <p className="text-muted-foreground mt-2">Explore our most popular product categories</p>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 md:gap-8">
             {FEATURED_CATEGORIES.map((category) => (
               <Link
                 key={category.slug}
                 href={`/categories/${category.slug}`}
-                className="group relative aspect-[4/3] overflow-hidden rounded-xl"
+                className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500"
               >
                 <Image 
                   src={category.image}
                   alt={category.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-                <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-                  <h3 className="text-lg md:text-xl font-semibold">{category.name}</h3>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent group-hover:from-black/90 transition-colors duration-300" />
+                <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+                  <h3 className="text-xl md:text-2xl font-heading font-bold group-hover:translate-x-2 transition-transform duration-300">{category.name}</h3>
+                  <p className="text-white/70 mt-1 group-hover:text-white transition-colors duration-300">Shop now →</p>
                 </div>
               </Link>
             ))}
@@ -131,22 +134,24 @@ export default function Home() {
       </section>
 
       {/* Verified Sellers */}
-      <section className="py-16 px-4 bg-muted">
+      <section className="py-20 px-4 bg-muted/50">
         <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary">
+          <div className="mb-10">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
               Verified Sellers
             </h2>
+            <p className="text-muted-foreground mt-2">Shop from trusted artisans and businesses</p>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {VERIFIED_SELLERS.map((seller) => (
               <div
                 key={seller.slug}
-                className="bg-white rounded-xl p-6 border border-border hover:shadow-lg transition-shadow"
+                className="bg-white rounded-2xl p-6 border border-border/50 hover:shadow-xl hover:border-secondary/20 
+                  transition-all duration-300 hover:-translate-y-1 group"
               >
                 <div className="flex items-center space-x-4 mb-4">
-                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-muted">
+                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-muted ring-2 ring-border group-hover:ring-secondary/30 transition-all duration-300">
                     <Image 
                       src={seller.avatar}
                       alt={seller.name}
@@ -157,13 +162,13 @@ export default function Home() {
                   <div className="flex-1">
                     <div className="flex items-center">
                       <h3 className="font-semibold text-foreground">{seller.name}</h3>
-                      <BadgeCheck className="w-4 h-4 ml-1 text-secondary" />
+                      <BadgeCheck className="w-5 h-5 ml-1.5 text-secondary" />
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">{seller.description}</p>
+                    <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{seller.description}</p>
                   </div>
                 </div>
                 <Link href={`/vendors/${seller.slug}`}>
-                  <Button variant="outline" fullWidth className="mt-4">
+                  <Button variant="outline" fullWidth className="mt-4 group-hover:bg-secondary group-hover:text-white group-hover:border-secondary transition-all duration-300">
                     View Profile
                   </Button>
                 </Link>
@@ -174,12 +179,13 @@ export default function Home() {
       </section>
 
       {/* Curated Global Collections */}
-      <section className="py-16 px-4">
+      <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary">
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-foreground">
               Curated Global Collections
             </h2>
+            <p className="text-muted-foreground mt-2 max-w-lg mx-auto">Handpicked collections showcasing the best of African creativity</p>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -187,17 +193,18 @@ export default function Home() {
               <Link 
                 key={collection.slug}
                 href={`/collections/${collection.slug}`}
-                className="group relative aspect-[3/4] overflow-hidden rounded-xl"
+                className="group relative aspect-[3/4] overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500"
               >
                 <Image 
                   src={collection.image}
                   alt={collection.name}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent group-hover:from-black/90 transition-colors duration-300" />
                 <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                  <h3 className="text-lg font-semibold">{collection.name}</h3>
+                  <h3 className="text-xl font-heading font-bold group-hover:translate-x-2 transition-transform duration-300">{collection.name}</h3>
+                  <p className="text-white/70 mt-1 text-sm group-hover:text-white transition-colors duration-300">Explore collection →</p>
                 </div>
               </Link>
             ))}
@@ -206,25 +213,26 @@ export default function Home() {
       </section>
 
       {/* Fresh Finds Section */}
-      <section className="relative py-16 px-4 bg-muted overflow-hidden">
+      <section className="relative py-24 px-4 bg-muted overflow-hidden">
         <Image 
           src="/images/hero/herosection2.png"
           alt="Lifestyle spotlight"
           fill
-          className="object-cover opacity-40"
+          className="object-cover opacity-30"
           priority={false}
         />
-        <div className="absolute inset-0 bg-muted/80" />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-muted/90 to-secondary/10" />
         <div className="relative max-w-7xl mx-auto text-center">
-          <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary mb-4">
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
             Fresh Finds, Just For You
           </h2>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground mb-10 text-lg max-w-md mx-auto">
             Discover the latest arrivals from our verified sellers
           </p>
           <Link href="/products?sort=newest">
-            <Button variant="primary" size="lg">
+            <Button variant="primary" size="lg" className="shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
               Shop New Arrivals
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Link>
         </div>

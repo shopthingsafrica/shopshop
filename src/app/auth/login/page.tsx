@@ -120,7 +120,7 @@ export default function LoginPage() {
           value={formData.password}
           onChange={handleChange}
           error={fieldErrors.password}
-          leftIcon={<Lock className="w-5 h-5" />}}
+          leftIcon={<Lock className="w-5 h-5" />}
           rightIcon={
             <button
               type="button"
