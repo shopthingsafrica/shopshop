@@ -41,13 +41,13 @@ export async function submitVendorApplication(
     .from('vendors')
     .select('id, status')
     .eq('user_id', user.id)
-    .single();
+    .single<{ id: string; status: string }>();
 
   if (existingVendor) {
-    if (existingVendor.status === 'approved') {
+    if ((existingVendor as any).status === 'approved') {
       return { error: 'You are already an approved vendor' };
     }
-    if (existingVendor.status === 'pending') {
+    if ((existingVendor as any).status === 'pending') {
       return { error: 'You already have a pending vendor application' };
     }
   }
@@ -68,7 +68,7 @@ export async function submitVendorApplication(
       business_type: data.businessType,
       product_categories: data.productCategories,
     },
-  });
+  } as any);
 
   if (vendorError) {
     console.error('Vendor creation error:', vendorError);
@@ -78,7 +78,7 @@ export async function submitVendorApplication(
   // Update user profile role to vendor (will be pending until approved)
   const { error: profileError } = await supabase
     .from('profiles')
-    .update({ role: 'vendor' })
+    .update({ role: 'vendor' } as any)
     .eq('id', user.id);
 
   if (profileError) {
@@ -107,7 +107,7 @@ export async function getVendorApplicationStatus(): Promise<{
     .from('vendors')
     .select('status')
     .eq('user_id', user.id)
-    .single();
+    .single<{ status: string }>();
 
-  return { status: vendor?.status || null };
+  return { status: (vendor as any)?.status || null };
 }

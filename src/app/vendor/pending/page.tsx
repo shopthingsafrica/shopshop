@@ -25,10 +25,10 @@ export default async function VendorPendingPage() {
     .from('vendors')
     .select('status, store_name, created_at')
     .eq('user_id', user.id)
-    .single();
+    .single<{ status: string; store_name: string; created_at: string }>();
 
   // If approved, redirect to vendor dashboard
-  if (vendor?.status === 'approved') {
+  if ((vendor as any)?.status === 'approved') {
     redirect('/vendor/dashboard');
   }
 
@@ -42,10 +42,10 @@ export default async function VendorPendingPage() {
     .from('profiles')
     .select('email')
     .eq('id', user.id)
-    .single();
+    .single<{ email: string }>();
 
-  const applicationDate = vendor?.created_at
-    ? new Date(vendor.created_at).toLocaleDateString('en-US', {
+  const applicationDate = (vendor as any)?.created_at
+    ? new Date((vendor as any).created_at).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'long',
         day: 'numeric',
@@ -76,7 +76,7 @@ export default async function VendorPendingPage() {
                 <Store className="w-5 h-5 text-secondary" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">{vendor?.store_name}</p>
+                <p className="font-semibold text-foreground">{(vendor as any)?.store_name}</p>
                 <p className="text-xs text-muted-foreground">Applied on {applicationDate}</p>
               </div>
             </div>
@@ -99,7 +99,7 @@ export default async function VendorPendingPage() {
               <li className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-blue-500 flex-shrink-0 mt-0.5" />
                 <span className="text-sm text-muted-foreground">
-                  You&apos;ll receive an email at <strong>{profile?.email}</strong> once your application is approved
+                  You&apos;ll receive an email at <strong>{(profile as any)?.email}</strong> once your application is approved
                 </span>
               </li>
               <li className="flex items-start gap-3">

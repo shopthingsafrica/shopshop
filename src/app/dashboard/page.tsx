@@ -36,15 +36,15 @@ export default async function CustomerDashboard() {
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single();
+    .single<{ id: string; email: string; full_name: string | null; role: string }>();
 
   // Check if user is a vendor - redirect to vendor dashboard
-  if (profile?.role === 'vendor') {
+  if ((profile as any)?.role === 'vendor') {
     redirect('/vendor/dashboard');
   }
 
   // Check if user is an admin - redirect to admin dashboard
-  if (profile?.role === 'admin') {
+  if ((profile as any)?.role === 'admin') {
     redirect('/admin/dashboard');
   }
 
@@ -102,7 +102,7 @@ export default async function CustomerDashboard() {
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-2xl md:text-3xl font-heading font-bold text-primary">
-          Welcome back, {profile?.full_name?.split(' ')[0] || 'there'}!
+          Welcome back, {(profile as any)?.full_name?.split(' ')[0] || 'there'}!
         </h1>
         <p className="text-muted-foreground mt-1">
           Here&apos;s what&apos;s happening with your account
