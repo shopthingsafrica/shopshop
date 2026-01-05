@@ -88,14 +88,11 @@ export default function Header() {
                 placeholder="Search for products, categories, vendors..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full py-3 px-5 pr-14 border border-border bg-muted/30 rounded-full
-                  focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary focus:bg-white
-                  transition-all duration-200 placeholder:text-muted-foreground/60"
+                className="w-full py-3 px-5 pr-14 border border-border bg-muted/30 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary focus:bg-white transition-all duration-200 placeholder:text-muted-foreground/60"
               />
               <button
                 type="submit"
-                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2.5 bg-secondary text-white rounded-full
-                  hover:bg-secondary/90 transition-all duration-200 hover:shadow-md hover:shadow-secondary/20"
+                className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2.5 bg-secondary text-white rounded-full hover:bg-secondary/90 transition-all duration-200 hover:shadow-md hover:shadow-secondary/20"
               >
                 <Search className="w-4 h-4" />
               </button>
@@ -329,14 +326,11 @@ export default function Header() {
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full py-3 px-5 pr-14 border border-border bg-muted/30 rounded-full
-                focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary focus:bg-white
-                transition-all duration-200 placeholder:text-muted-foreground/60"
+              className="w-full py-3 px-5 pr-14 border border-border bg-muted/30 rounded-full focus:outline-none focus:ring-2 focus:ring-secondary/30 focus:border-secondary focus:bg-white transition-all duration-200 placeholder:text-muted-foreground/60"
             />
             <button
               type="submit"
-              className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2.5 bg-secondary text-white rounded-full
-                hover:bg-secondary/90 transition-all duration-200"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 p-2.5 bg-secondary text-white rounded-full hover:bg-secondary/90 transition-all duration-200"
             >
               <Search className="w-4 h-4" />
             </button>
