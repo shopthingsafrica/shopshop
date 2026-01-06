@@ -186,7 +186,7 @@ const SORT_OPTIONS = [
 
 function ProductsContent() {
   const searchParams = useSearchParams();
-  const { formatPrice } = useCurrencyStore();
+  // Currency formatting handled by ProductCard component
   
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [showFilters, setShowFilters] = useState(false);
