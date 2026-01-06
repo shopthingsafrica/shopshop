@@ -41,7 +41,7 @@ const RECOMMENDED_PRODUCTS: ProductWithDetails[] = [
     average_rating: 4.8,
     review_count: 162,
     slug: 'handwoven-kente-throw',
-    vendor: { id: 'v1', store_name: 'Accra Textiles', is_verified: true, logo_url: null, is_verified: true } as any,
+    vendor: { id: 'v1', store_name: 'Accra Textiles', is_verified: true, logo_url: null } as any,
     category: { id: 'c1', name: 'Home & Art', slug: 'home-art' } as any,
     ...productDefaults,
   },
@@ -52,7 +52,7 @@ const RECOMMENDED_PRODUCTS: ProductWithDetails[] = [
     average_rating: 4.7,
     review_count: 204,
     slug: 'ankara-wrap-dress',
-    vendor: { id: 'v2', store_name: 'Lagos Fashion House', is_verified: true, logo_url: null, is_verified: true } as any,
+    vendor: { id: 'v2', store_name: 'Lagos Fashion House', is_verified: true, logo_url: null } as any,
     category: { id: 'c2', name: 'Fashion', slug: 'fashion' } as any,
     ...productDefaults,
   },
@@ -63,7 +63,7 @@ const RECOMMENDED_PRODUCTS: ProductWithDetails[] = [
     average_rating: 4.9,
     review_count: 311,
     slug: 'shea-butter-essentials',
-    vendor: { id: 'v3', store_name: 'Natural Ghana', is_verified: true, logo_url: null, is_verified: true } as any,
+    vendor: { id: 'v3', store_name: 'Natural Ghana', is_verified: true, logo_url: null } as any,
     category: { id: 'c3', name: 'Skincare', slug: 'skincare' } as any,
     ...productDefaults,
   },
@@ -74,7 +74,7 @@ const RECOMMENDED_PRODUCTS: ProductWithDetails[] = [
     average_rating: 4.6,
     review_count: 97,
     slug: 'tuareg-silver-cuff',
-    vendor: { id: 'v4', store_name: 'Sahara Metals', is_verified: true, logo_url: null, is_verified: true } as any,
+    vendor: { id: 'v4', store_name: 'Sahara Metals', is_verified: true, logo_url: null } as any,
     category: { id: 'c4', name: 'Jewelry', slug: 'jewelry' } as any,
     ...productDefaults,
   },
@@ -173,8 +173,31 @@ export default async function CustomerDashboard() {
               <p className="text-muted-foreground">
                 Here&apos;s what&apos;s happening with your account
               </p>
+              <div className="mt-2 inline-flex items-center gap-2 rounded-full bg-white border border-border/70 px-3 py-1 text-xs font-semibold text-muted-foreground">
+                <span className="inline-block w-2 h-2 rounded-full bg-secondary" aria-hidden />
+                Customer account
+              </div>
             </div>
           </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-8">
+          {[
+            { label: 'Track order', href: '/orders', icon: Package },
+            { label: 'Reorder items', href: '/orders', icon: ShoppingBag },
+            { label: 'Start a return', href: '/orders', icon: ArrowRight },
+            { label: 'Contact support', href: '/help', icon: Heart },
+          ].map((action) => (
+            <Link
+              key={action.label}
+              href={action.href}
+              className="flex items-center gap-3 rounded-2xl border border-border/60 bg-white hover:border-secondary/40 hover:shadow-md transition-all duration-200 px-4 py-3"
+            >
+              <action.icon className="w-5 h-5 text-secondary" />
+              <span className="font-medium text-foreground">{action.label}</span>
+            </Link>
+          ))}
         </div>
 
         {/* Quick Links Grid */}
@@ -196,6 +219,25 @@ export default async function CustomerDashboard() {
               <p className="text-sm text-muted-foreground">{link.description}</p>
             </Link>
           ))}
+        </div>
+
+        {/* Recommended for You */}
+        <div className="bg-white rounded-2xl border border-border/50 p-6 shadow-sm mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-xl font-heading font-semibold text-foreground">Recommended for you</h2>
+              <p className="text-muted-foreground text-sm">Curated picks based on what customers love</p>
+            </div>
+            <Link href="/products" className="text-secondary text-sm font-semibold flex items-center gap-1 hover:text-secondary/80">
+              See all
+              <ChevronRight className="w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {RECOMMENDED_PRODUCTS.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
         </div>
 
         {/* Become a Seller CTA */}
