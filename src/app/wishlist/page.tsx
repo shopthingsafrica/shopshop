@@ -7,10 +7,21 @@ import { Button } from '@/components/ui';
 import { useCartStore, useCurrencyStore } from '@/stores';
 import { getPlaceholderImage } from '@/lib/placeholders';
 
+import { useEffect } from 'react';
 // Mock wishlist data - in a real app this would come from a store or API
 const MOCK_WISHLIST = [
   {
     id: '1',
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const formatDisplayPrice = (price: number) =>
+    mounted
+      ? formatConvertedPrice(price, 'NGN')
+      : `₦${price.toLocaleString('en-NG')}`;
     productId: '1',
     name: 'Traditional Kente Cloth',
     price: 15000,
