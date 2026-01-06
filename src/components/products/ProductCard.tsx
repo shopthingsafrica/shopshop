@@ -16,33 +16,28 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, showVendor = true }: ProductCardProps) {
   const [mounted, setMounted] = React.useState(false);
-  const { convertPrice, formatPrice, currentCurrency } = useCurrencyStore();
+  const { formatConvertedPrice, currentCurrency } = useCurrencyStore();
   const addItem = useCartStore((state) => state.addItem);
 
   React.useEffect(() => {
     setMounted(true);
   }, []);
   
-  // Use product's original currency for SSR, then switch to user's currency after mount
-  const displayPrice = mounted 
-    ? convertPrice(product.price, product.currency as CurrencyCode)
-    : product.price;
-  const displayComparePrice = product.compare_at_price 
-    ? (mounted ? convertPrice(product.compare_at_price, product.currency as CurrencyCode) : product.compare_at_price)
-    : null;
-  
-  // Format price with the appropriate currency
+  // Format price - use original currency for SSR, then user's selected currency after mount
+  const productCurrency = product.currency as CurrencyCode;
   const formattedPrice = mounted 
-    ? formatPrice(displayPrice)
-    : `${CURRENCIES[product.currency as CurrencyCode]?.symbol || '₦'}${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  const formattedComparePrice = displayComparePrice 
+    ? formatConvertedPrice(product.price, productCurrency)
+    : `${CURRENCIES[productCurrency]?.symbol || '₦'}${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  
+  const formattedComparePrice = product.compare_at_price 
     ? (mounted 
-        ? formatPrice(displayComparePrice)
-        : `${CURRENCIES[product.currency as CurrencyCode]?.symbol || '₦'}${product.compare_at_price?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
+        ? formatConvertedPrice(product.compare_at_price, productCurrency)
+        : `${CURRENCIES[productCurrency]?.symbol || '₦'}${product.compare_at_price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
     : null;
   
-  const discount = displayComparePrice 
-    ? Math.round(((displayComparePrice - displayPrice) / displayComparePrice) * 100)
+  // Calculate discount based on original prices (not converted)
+  const discount = product.compare_at_price 
+    ? Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)
     : null;
 
   const handleAddToCart = (e: React.MouseEvent) => {

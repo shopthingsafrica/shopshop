@@ -188,7 +188,7 @@ const RELATED_PRODUCTS = [
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const { addItem } = useCartStore();
   
   const [selectedImage, setSelectedImage] = useState(0);
@@ -449,11 +449,11 @@ export default function ProductDetailPage() {
             {/* Price */}
             <div className="flex items-baseline gap-3">
               <span className="text-3xl font-bold text-primary">
-                {formatPrice(product.price)}
+                {formatConvertedPrice(product.price, 'NGN')}
               </span>
               {product.compare_at_price && (
                 <span className="text-xl text-muted-foreground line-through">
-                  {formatPrice(product.compare_at_price)}
+                  {formatConvertedPrice(product.compare_at_price, 'NGN')}
                 </span>
               )}
             </div>
