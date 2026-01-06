@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -36,10 +37,16 @@ export default function Header() {
   const [isCurrencyOpen, setIsCurrencyOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [mounted, setMounted] = useState(false);
   
   const { currentCurrency, setCurrency, getCurrency } = useCurrencyStore();
   const cartItemCount = useCartStore((state) => state.getItemCount());
   const { user, profile, isAuthenticated, isLoading } = useAuth();
+
+  // Prevent hydration mismatch for currency
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,7 +115,7 @@ export default function Header() {
                 className="flex items-center space-x-1.5 px-3 py-2.5 rounded-lg hover:bg-muted/80 transition-all duration-200"
               >
                 <Globe className="w-4 h-4 text-muted-foreground" />
-                <span className="font-medium">{getCurrency().symbol}</span>
+                <span className="font-medium">{mounted ? getCurrency().symbol : '₦'}</span>
                 <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform duration-200 ${isCurrencyOpen ? 'rotate-180' : ''}`} />
               </button>
               
