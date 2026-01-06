@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, ShoppingCart, Star, BadgeCheck } from 'lucide-react';
 import { useCurrencyStore, useCartStore } from '@/stores';
+import { getProductImage } from '@/lib/placeholders';
 import type { ProductWithDetails, CurrencyCode } from '@/types';
 
 interface ProductCardProps {
@@ -54,7 +55,7 @@ export default function ProductCard({ product, showVendor = true }: ProductCardP
     console.log('Add to wishlist:', product.id);
   };
 
-  const mainImage = product.images[0] || '/placeholder-product.jpg';
+  const mainImage = getProductImage(product.images, product.id);
 
   return (
     <Link
