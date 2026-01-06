@@ -149,9 +149,11 @@ export async function updateSession(request: NextRequest) {
       .from('profiles')
       .select('role')
       .eq('id', user.id)
-      .single();
+      .single<{ role: 'admin' | 'vendor' | 'customer' | null }>();
 
-    if (profile?.role !== 'admin') {
+    const profileRole = profile?.role ?? null;
+
+    if (profileRole !== 'admin') {
       const url = request.nextUrl.clone();
       url.pathname = '/dashboard';
       return NextResponse.redirect(url);
