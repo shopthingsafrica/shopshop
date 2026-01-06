@@ -278,7 +278,7 @@ export default function ProductDetailPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-medium truncate">{product.name}</p>
-                <p className="text-sm text-secondary font-semibold">{formatPrice(product.price)}</p>
+                <p className="text-sm text-secondary font-semibold">{formatConvertedPrice(product.price, 'NGN')}</p>
               </div>
             </div>
 

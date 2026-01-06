@@ -19,7 +19,7 @@ import { getProductImage } from '@/lib/placeholders';
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, clearCart, getSubtotal } = useCartStore();
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [couponCode, setCouponCode] = useState('');
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState('');
@@ -28,6 +28,11 @@ export default function CartPage() {
   const shipping = subtotal > 50000 ? 0 : 2500;
   const discount = couponApplied ? subtotal * 0.1 : 0;
   const total = subtotal + shipping - discount;
+
+  // Helper to format cart item prices (items store currency info)
+  const formatItemPrice = (price: number, currency: string) => {
+    return formatConvertedPrice(price, currency as 'NGN' | 'USD');
+  };
 
   const handleApplyCoupon = () => {
     if (couponCode.toLowerCase() === 'welcome10') {
@@ -149,12 +154,12 @@ export default function CartPage() {
                 {/* Price - Mobile */}
                 <div className="md:hidden flex justify-between items-center mt-4 pt-4 border-t border-border">
                   <span className="text-muted-foreground">Price:</span>
-                  <span className="font-medium">{formatPrice(item.product.price)}</span>
+                  <span className="font-medium">{formatItemPrice(item.product.price, item.product.currency)}</span>
                 </div>
 
                 {/* Price - Desktop */}
                 <div className="hidden md:block md:col-span-2 text-center">
-                  {formatPrice(item.product.price)}
+                  {formatItemPrice(item.product.price, item.product.currency)}
                 </div>
 
                 {/* Quantity */}
@@ -183,13 +188,13 @@ export default function CartPage() {
                 {/* Total - Mobile */}
                 <div className="md:hidden flex justify-between items-center mt-4 pt-4 border-t border-border">
                   <span className="text-muted-foreground">Subtotal:</span>
-                  <span className="font-bold text-primary">{formatPrice(item.product.price * item.quantity)}</span>
+                  <span className="font-bold text-primary">{formatItemPrice(item.product.price * item.quantity, item.product.currency)}</span>
                 </div>
 
                 {/* Total - Desktop */}
                 <div className="hidden md:flex md:col-span-2 items-center justify-end gap-4">
                   <span className="font-bold text-primary">
-                    {formatPrice(item.product.price * item.quantity)}
+                    {formatItemPrice(item.product.price * item.quantity, item.product.currency)}
                   </span>
                   <button
                     onClick={() => removeItem(item.product.id)}
@@ -249,23 +254,23 @@ export default function CartPage() {
               <div className="space-y-3 pb-4 border-b border-border">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span>{formatConvertedPrice(subtotal, 'NGN')}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
+                  <span>{shipping === 0 ? 'Free' : formatConvertedPrice(shipping, 'NGN')}</span>
                 </div>
                 {discount > 0 && (
                   <div className="flex justify-between text-success">
                     <span>Discount</span>
-                    <span>-{formatPrice(discount)}</span>
+                    <span>-{formatConvertedPrice(discount, 'NGN')}</span>
                   </div>
                 )}
               </div>
 
               <div className="flex justify-between py-4 text-lg font-bold">
                 <span>Total</span>
-                <span className="text-primary">{formatPrice(total)}</span>
+                <span className="text-primary">{formatConvertedPrice(total, 'NGN')}</span>
               </div>
 
               <Link href="/checkout">
