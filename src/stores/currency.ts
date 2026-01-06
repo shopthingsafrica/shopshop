@@ -9,6 +9,7 @@ interface CurrencyState {
   setCurrency: (currency: CurrencyCode) => void;
   convertPrice: (price: number, fromCurrency: CurrencyCode) => number;
   formatPrice: (price: number, currency?: CurrencyCode) => string;
+  formatConvertedPrice: (price: number, fromCurrency: CurrencyCode) => string;
   getCurrency: () => Currency;
 }
 
@@ -42,6 +43,23 @@ export const useCurrencyStore = create<CurrencyState>()(
         }).format(price);
         
         return `${currencyInfo.symbol}${formattedNumber}`;
+      },
+
+      formatConvertedPrice: (price: number, fromCurrency: CurrencyCode) => {
+        const from = CURRENCIES[fromCurrency];
+        const to = CURRENCIES[get().currentCurrency];
+        
+        // Convert to USD first, then to target currency
+        const priceInUsd = price / from.rate;
+        const convertedPrice = priceInUsd * to.rate;
+        const roundedPrice = Math.round(convertedPrice * 100) / 100;
+        
+        const formattedNumber = new Intl.NumberFormat('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        }).format(roundedPrice);
+        
+        return `${to.symbol}${formattedNumber}`;
       },
       
       getCurrency: () => {
