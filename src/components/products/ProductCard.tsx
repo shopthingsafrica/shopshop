@@ -1,11 +1,13 @@
 'use client';
 
+import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, ShoppingCart, Star, BadgeCheck } from 'lucide-react';
 import { useCurrencyStore, useCartStore } from '@/stores';
 import { getProductImage } from '@/lib/placeholders';
 import type { ProductWithDetails, CurrencyCode } from '@/types';
+import { CURRENCIES } from '@/types';
 
 interface ProductCardProps {
   product: ProductWithDetails;
@@ -13,12 +15,30 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, showVendor = true }: ProductCardProps) {
+  const [mounted, setMounted] = React.useState(false);
   const { convertPrice, formatPrice, currentCurrency } = useCurrencyStore();
   const addItem = useCartStore((state) => state.addItem);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
   
-  const displayPrice = convertPrice(product.price, product.currency as CurrencyCode);
+  // Use product's original currency for SSR, then switch to user's currency after mount
+  const displayPrice = mounted 
+    ? convertPrice(product.price, product.currency as CurrencyCode)
+    : product.price;
   const displayComparePrice = product.compare_at_price 
-    ? convertPrice(product.compare_at_price, product.currency as CurrencyCode)
+    ? (mounted ? convertPrice(product.compare_at_price, product.currency as CurrencyCode) : product.compare_at_price)
+    : null;
+  
+  // Format price with the appropriate currency
+  const formattedPrice = mounted 
+    ? formatPrice(displayPrice)
+    : `${CURRENCIES[product.currency as CurrencyCode]?.symbol || '₦'}${product.price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const formattedComparePrice = displayComparePrice 
+    ? (mounted 
+        ? formatPrice(displayComparePrice)
+        : `${CURRENCIES[product.currency as CurrencyCode]?.symbol || '₦'}${product.compare_at_price?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`)
     : null;
   
   const discount = displayComparePrice 
@@ -142,11 +162,11 @@ export default function ProductCard({ product, showVendor = true }: ProductCardP
         {/* Price */}
         <div className="flex items-center space-x-2">
           <span className="text-lg font-bold text-primary">
-            {formatPrice(displayPrice)}
+            {formattedPrice}
           </span>
-          {displayComparePrice && (
+          {formattedComparePrice && (
             <span className="text-sm text-muted-foreground line-through">
-              {formatPrice(displayComparePrice)}
+              {formattedComparePrice}
             </span>
           )}
         </div>

@@ -186,15 +186,11 @@ export default function Footer() {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/50 
-                  focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary focus:bg-white/15
-                  transition-all duration-200 w-full md:w-72"
+                className="px-5 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary focus:bg-white/15 transition-all duration-200 w-full md:w-72"
               />
               <button
                 type="submit"
-                className="px-7 py-3 bg-secondary text-white rounded-xl font-medium 
-                  hover:bg-secondary/90 hover:shadow-lg hover:shadow-secondary/20 
-                  active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+                className="px-7 py-3 bg-secondary text-white rounded-xl font-medium hover:bg-secondary/90 hover:shadow-lg hover:shadow-secondary/20 active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
               >
                 Subscribe
               </button>
