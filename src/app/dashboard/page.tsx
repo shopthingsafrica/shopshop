@@ -14,6 +14,8 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui';
+import ProductCard from '@/components/products/ProductCard';
+import type { ProductWithDetails } from '@/types';
 
 export const metadata = {
   title: 'Dashboard | ShopThings',
@@ -22,6 +24,61 @@ export const metadata = {
 
 // Ensure the dashboard is never cached so auth redirects don't get stuck
 export const dynamic = 'force-dynamic';
+
+const productDefaults = {
+  currency: 'NGN',
+  images: [] as string[],
+  stock_quantity: 25,
+  compare_at_price: null as number | null,
+  is_featured: false,
+};
+
+const RECOMMENDED_PRODUCTS: ProductWithDetails[] = [
+  {
+    id: 'rec-1',
+    name: 'Handwoven Kente Throw',
+    price: 18500,
+    average_rating: 4.8,
+    review_count: 162,
+    slug: 'handwoven-kente-throw',
+    vendor: { id: 'v1', store_name: 'Accra Textiles', is_verified: true, logo_url: null, is_verified: true } as any,
+    category: { id: 'c1', name: 'Home & Art', slug: 'home-art' } as any,
+    ...productDefaults,
+  },
+  {
+    id: 'rec-2',
+    name: 'Ankara Wrap Dress',
+    price: 16000,
+    average_rating: 4.7,
+    review_count: 204,
+    slug: 'ankara-wrap-dress',
+    vendor: { id: 'v2', store_name: 'Lagos Fashion House', is_verified: true, logo_url: null, is_verified: true } as any,
+    category: { id: 'c2', name: 'Fashion', slug: 'fashion' } as any,
+    ...productDefaults,
+  },
+  {
+    id: 'rec-3',
+    name: 'Shea Butter Essentials Kit',
+    price: 9200,
+    average_rating: 4.9,
+    review_count: 311,
+    slug: 'shea-butter-essentials',
+    vendor: { id: 'v3', store_name: 'Natural Ghana', is_verified: true, logo_url: null, is_verified: true } as any,
+    category: { id: 'c3', name: 'Skincare', slug: 'skincare' } as any,
+    ...productDefaults,
+  },
+  {
+    id: 'rec-4',
+    name: 'Tuareg Silver Cuff',
+    price: 21000,
+    average_rating: 4.6,
+    review_count: 97,
+    slug: 'tuareg-silver-cuff',
+    vendor: { id: 'v4', store_name: 'Sahara Metals', is_verified: true, logo_url: null, is_verified: true } as any,
+    category: { id: 'c4', name: 'Jewelry', slug: 'jewelry' } as any,
+    ...productDefaults,
+  },
+];
 
 export default async function CustomerDashboard() {
   const supabase = await createClient();
