@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Poppins, Roboto } from "next/font/google";
 import "./globals.css";
-import { Header, Footer } from "@/components/layout";
+import { Header } from "@/components/layout";
+import FooterWrapper from "@/components/layout/FooterWrapper";
 import { AuthProvider } from "@/components/providers";
 
 const poppins = Poppins({
@@ -47,7 +48,7 @@ export default function RootLayout({
           <main className="min-h-screen">
             {children}
           </main>
-          <Footer />
+          <FooterWrapper />
         </AuthProvider>
       </body>
     </html>

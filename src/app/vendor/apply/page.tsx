@@ -18,7 +18,6 @@ import {
 } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
 import { submitVendorApplication } from './actions';
-import DashboardFooter from '@/components/layout/DashboardFooter';
 
 interface FormData {
   storeName: string;
@@ -552,8 +551,6 @@ export default function VendorApplicationPage() {
           </div>
         </div>
       </div>
-      
-      <DashboardFooter />
     </div>
   );
 }

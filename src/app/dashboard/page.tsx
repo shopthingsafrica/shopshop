@@ -14,7 +14,6 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Button } from '@/components/ui';
-import DashboardFooter from '@/components/layout/DashboardFooter';
 
 export const metadata = {
   title: 'Dashboard | ShopThings',
@@ -215,8 +214,6 @@ export default async function CustomerDashboard() {
           </div>
         </div>
       </div>
-      
-      <DashboardFooter />
     </div>
   );
 }
