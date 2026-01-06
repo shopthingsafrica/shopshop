@@ -43,6 +43,13 @@ export default function Header() {
   const cartItemCount = useCartStore((state) => state.getItemCount());
   const { user, profile, isAuthenticated, isLoading } = useAuth();
 
+  // Derive a safe initial and role to avoid empty states while profile loads
+  const userInitial = React.useMemo(() => {
+    return profile?.full_name?.charAt(0) || user?.email?.charAt(0) || 'U';
+  }, [profile?.full_name, user?.email]);
+
+  const userRole = profile?.role;
+
   // Prevent hydration mismatch for currency
   React.useEffect(() => {
     setMounted(true);
@@ -180,12 +187,14 @@ export default function Header() {
                 className="p-2 rounded-lg hover:bg-muted/80 transition-all duration-200 flex items-center gap-2"
                 aria-label="Account"
               >
-                {isAuthenticated && profile ? (
+                {mounted && isAuthenticated && (user || profile) ? (
                   <div className="w-9 h-9 rounded-full bg-gradient-to-br from-secondary to-secondary/70 flex items-center justify-center shadow-sm">
                     <span className="text-sm font-bold text-white">
-                      {profile.full_name?.charAt(0) || user?.email?.charAt(0) || 'U'}
+                      {userInitial}
                     </span>
                   </div>
+                ) : isLoading ? (
+                  <div className="w-9 h-9 rounded-full bg-muted animate-pulse" aria-hidden />
                 ) : (
                   <User className="w-5 h-5" />
                 )}
@@ -198,12 +207,12 @@ export default function Header() {
                     onClick={() => setIsUserMenuOpen(false)}
                   />
                   <div className="absolute right-0 top-full mt-2 w-60 bg-white rounded-xl shadow-xl border border-border/50 z-20 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                    {isAuthenticated && profile ? (
+                    {isAuthenticated && (profile || user) ? (
                       <>
                         {/* User info */}
                         <div className="px-4 py-4 border-b border-border/50 bg-muted/30">
                           <p className="font-semibold text-foreground truncate">
-                            {profile.full_name || 'User'}
+                            {profile?.full_name || user?.email || 'User'}
                           </p>
                           <p className="text-sm text-muted-foreground truncate">
                             {user?.email}
@@ -238,7 +247,7 @@ export default function Header() {
                           </Link>
                           
                           {/* Vendor/Admin links */}
-                          {(profile.role === 'vendor' || profile.role === 'admin') && (
+                          {(userRole === 'vendor' || userRole === 'admin') && (
                             <Link
                               href="/vendor/dashboard"
                               className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/70 transition-colors duration-150"
@@ -248,7 +257,7 @@ export default function Header() {
                               <span className="text-secondary font-medium">Vendor Dashboard</span>
                             </Link>
                           )}
-                          {profile.role === 'admin' && (
+                          {userRole === 'admin' && (
                             <Link
                               href="/admin"
                               className="flex items-center gap-3 px-4 py-2.5 hover:bg-muted/70 transition-colors duration-150"
