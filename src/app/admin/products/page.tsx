@@ -35,6 +35,7 @@ import {
 } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
 import { useCurrencyStore } from '@/stores';
+import { getProductImage } from '@/lib/placeholders';
 
 // Mock products data for moderation
 const MOCK_PRODUCTS = [
@@ -401,8 +402,14 @@ export default function AdminProductsPage() {
                     <div className="p-4">
                       <div className="flex gap-4">
                         {/* Product Image */}
-                        <div className="w-20 h-20 bg-gray-100 rounded-lg flex items-center justify-center shrink-0">
-                          <ImageIcon className="w-8 h-8 text-gray-300" />
+                        <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden shrink-0">
+                          <Image
+                            src={getProductImage(product.images, product.id)}
+                            alt={product.name}
+                            width={80}
+                            height={80}
+                            className="w-full h-full object-cover"
+                          />
                         </div>
 
                         {/* Product Info */}
@@ -584,8 +591,14 @@ export default function AdminProductsPage() {
                         </div>
                         <div className="p-4 space-y-4">
                           {/* Product Image */}
-                          <div className="aspect-square bg-gray-100 rounded-lg flex items-center justify-center">
-                            <ImageIcon className="w-16 h-16 text-gray-300" />
+                          <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
+                            <Image
+                              src={getProductImage(product.images, product.id)}
+                              alt={product.name}
+                              width={400}
+                              height={400}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
 
                           {/* Product Name & Status */}
