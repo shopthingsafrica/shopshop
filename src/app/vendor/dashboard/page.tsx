@@ -141,7 +141,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function VendorDashboardPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -277,7 +277,7 @@ export default function VendorDashboardPage() {
                 <div>
                   <p className="text-sm text-muted-foreground">Total Sales</p>
                   <p className="text-2xl font-bold text-primary mt-1">
-                    {formatPrice(MOCK_STATS.totalSales)}
+                    {formatConvertedPrice(MOCK_STATS.totalSales, 'NGN')}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -361,7 +361,7 @@ export default function VendorDashboardPage() {
                 <div>
                   <p className="text-sm text-muted-foreground">Wallet Balance</p>
                   <p className="text-2xl font-bold text-primary mt-1">
-                    {formatPrice(MOCK_STATS.walletBalance)}
+                    {formatConvertedPrice(MOCK_STATS.walletBalance, 'NGN')}
                   </p>
                 </div>
                 <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center">
@@ -369,7 +369,7 @@ export default function VendorDashboardPage() {
                 </div>
               </div>
               <p className="text-sm text-muted-foreground mt-3">
-                Pending: {formatPrice(MOCK_STATS.pendingBalance)}
+                Pending: {formatConvertedPrice(MOCK_STATS.pendingBalance, 'NGN')}
               </p>
             </div>
           </div>
@@ -462,7 +462,7 @@ export default function VendorDashboardPage() {
                         <td className="px-4 py-3 text-sm">{order.customer}</td>
                         <td className="px-4 py-3 text-sm">{order.items}</td>
                         <td className="px-4 py-3 text-sm font-medium">
-                          {formatPrice(order.total)}
+                          {formatConvertedPrice(order.total, 'NGN')}
                         </td>
                         <td className="px-4 py-3">
                           <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full capitalize ${
@@ -504,7 +504,7 @@ export default function VendorDashboardPage() {
                       <p className="text-xs text-muted-foreground">{product.sales} sales</p>
                     </div>
                     <p className="text-sm font-medium text-primary">
-                      {formatPrice(product.revenue)}
+                      {formatConvertedPrice(product.revenue, 'NGN')}
                     </p>
                   </div>
                 ))}

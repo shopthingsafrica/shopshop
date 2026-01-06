@@ -69,7 +69,7 @@ const MOCK_ORDER = {
 
 export default function OrderDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
 
   return (
     <div className="min-h-screen bg-background">
@@ -222,7 +222,7 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
                       </p>
                     </div>
                     <p className="font-medium">
-                      {formatPrice(item.price * item.quantity)}
+                      {formatConvertedPrice(item.price * item.quantity, 'NGN')}
                     </p>
                   </div>
                 ))}
@@ -264,21 +264,21 @@ export default function OrderDetailPage({ params }: { params: Promise<{ id: stri
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span>{formatPrice(MOCK_ORDER.subtotal)}</span>
+                  <span>{formatConvertedPrice(MOCK_ORDER.subtotal, 'NGN')}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span>{MOCK_ORDER.shipping === 0 ? 'Free' : formatPrice(MOCK_ORDER.shipping)}</span>
+                  <span>{MOCK_ORDER.shipping === 0 ? 'Free' : formatConvertedPrice(MOCK_ORDER.shipping, 'NGN')}</span>
                 </div>
                 {MOCK_ORDER.discount > 0 && (
                   <div className="flex justify-between text-success">
                     <span>Discount</span>
-                    <span>-{formatPrice(MOCK_ORDER.discount)}</span>
+                    <span>-{formatConvertedPrice(MOCK_ORDER.discount, 'NGN')}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-lg font-bold pt-3 border-t border-border">
                   <span>Total</span>
-                  <span className="text-primary">{formatPrice(MOCK_ORDER.total)}</span>
+                  <span className="text-primary">{formatConvertedPrice(MOCK_ORDER.total, 'NGN')}</span>
                 </div>
               </div>
             </div>

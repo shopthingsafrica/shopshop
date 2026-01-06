@@ -164,7 +164,7 @@ const STATUS_COLORS: Record<string, { bg: string; text: string }> = {
 const STATUS_OPTIONS = ['pending', 'processing', 'shipped', 'delivered', 'cancelled'];
 
 export default function VendorOrdersPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -407,7 +407,7 @@ export default function VendorOrdersPage() {
                           {order.items.length} item{order.items.length > 1 ? 's' : ''}
                         </p>
                       </div>
-                      <p className="font-bold text-primary">{formatPrice(order.total)}</p>
+                      <p className="font-bold text-primary">{formatConvertedPrice(order.total, 'NGN')}</p>
                     </div>
                   </div>
 
@@ -530,7 +530,7 @@ export default function VendorOrdersPage() {
                               {order.items.map((item, i) => (
                                 <div key={i} className="flex items-center justify-between text-sm">
                                   <span>{item.name} × {item.quantity}</span>
-                                  <span className="font-medium">{formatPrice(item.price * item.quantity)}</span>
+                                  <span className="font-medium">{formatConvertedPrice(item.price * item.quantity, 'NGN')}</span>
                                 </div>
                               ))}
                             </div>
@@ -540,15 +540,15 @@ export default function VendorOrdersPage() {
                           <div className="pt-4 border-t space-y-2">
                             <div className="flex items-center justify-between text-sm">
                               <span className="text-muted-foreground">Subtotal</span>
-                              <span>{formatPrice(order.subtotal)}</span>
+                              <span>{formatConvertedPrice(order.subtotal, 'NGN')}</span>
                             </div>
                             <div className="flex items-center justify-between text-sm">
                               <span className="text-muted-foreground">Shipping</span>
-                              <span>{formatPrice(order.shipping)}</span>
+                              <span>{formatConvertedPrice(order.shipping, 'NGN')}</span>
                             </div>
                             <div className="flex items-center justify-between font-bold pt-2 border-t">
                               <span>Total</span>
-                              <span className="text-primary">{formatPrice(order.total)}</span>
+                              <span className="text-primary">{formatConvertedPrice(order.total, 'NGN')}</span>
                             </div>
                           </div>
 

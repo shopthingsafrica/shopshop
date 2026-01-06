@@ -53,7 +53,7 @@ const MOCK_WISHLIST = [
 
 export default function WishlistPage() {
   const { addItem } = useCartStore();
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
 
   const handleAddToCart = (item: typeof MOCK_WISHLIST[0]) => {
     addItem({
@@ -182,11 +182,11 @@ export default function WishlistPage() {
                 {/* Price */}
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-lg font-bold text-primary">
-                    {formatPrice(item.price)}
+                    {formatConvertedPrice(item.price, 'NGN')}
                   </span>
                   {item.comparePrice && (
                     <span className="text-sm text-muted-foreground line-through">
-                      {formatPrice(item.comparePrice)}
+                      {formatConvertedPrice(item.comparePrice, 'NGN')}
                     </span>
                   )}
                 </div>

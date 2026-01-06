@@ -149,7 +149,7 @@ const NAV_ITEMS = [
 ];
 
 export default function AdminDashboardPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const maxUsers = Math.max(...USER_GROWTH.map(d => d.users));
@@ -284,7 +284,7 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
                   <p className="text-2xl font-bold text-foreground">
-                    {stat.isCurrency ? formatPrice(stat.value as number) : stat.value}
+                    {stat.isCurrency ? formatConvertedPrice(stat.value as number, 'NGN') : stat.value}
                   </p>
                   <p className="text-sm text-muted-foreground">{stat.label}</p>
                 </div>
@@ -462,7 +462,7 @@ export default function AdminDashboardPage() {
                           </div>
                         </td>
                         <td className="py-3 px-4 text-right font-medium text-green-600">
-                          {formatPrice(vendor.sales)}
+                          {formatConvertedPrice(vendor.sales, 'NGN')}
                         </td>
                         <td className="py-3 px-4 text-right text-muted-foreground hidden sm:table-cell">
                           {vendor.products}

@@ -172,7 +172,7 @@ const STATUS_COLORS: Record<string, { bg: string; text: string; icon: React.Elem
 };
 
 export default function AdminVendorsPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -343,7 +343,7 @@ export default function AdminVendorsPage() {
             <div className="bg-white rounded-xl p-4 shadow-sm">
               <p className="text-sm text-muted-foreground">Total Sales</p>
               <p className="text-2xl font-bold text-secondary mt-1">
-                {formatPrice(MOCK_VENDORS.reduce((sum, v) => sum + v.total_sales, 0))}
+                {formatConvertedPrice(MOCK_VENDORS.reduce((sum, v) => sum + v.total_sales, 0), 'NGN')}
               </p>
             </div>
           </div>
@@ -492,7 +492,7 @@ export default function AdminVendorsPage() {
                             <span className="text-muted-foreground"> products</span>
                           </span>
                           <span>
-                            <span className="font-medium text-green-600">{formatPrice(vendor.total_sales)}</span>
+                            <span className="font-medium text-green-600">{formatConvertedPrice(vendor.total_sales, 'NGN')}</span>
                             <span className="text-muted-foreground"> sales</span>
                           </span>
                         </div>
@@ -624,7 +624,7 @@ export default function AdminVendorsPage() {
                                 <p className="text-xs text-muted-foreground">Products</p>
                               </div>
                               <div className="text-center p-3 bg-gray-50 rounded-lg">
-                                <p className="text-xl font-bold text-green-600">{formatPrice(vendor.total_sales)}</p>
+                                <p className="text-xl font-bold text-green-600">{formatConvertedPrice(vendor.total_sales, 'NGN')}</p>
                                 <p className="text-xs text-muted-foreground">Total Sales</p>
                               </div>
                             </div>

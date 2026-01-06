@@ -134,7 +134,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function VendorProductsPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -461,10 +461,10 @@ export default function VendorProductsPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <p className="font-medium">{formatPrice(product.price)}</p>
+                        <p className="font-medium">{formatConvertedPrice(product.price, 'NGN')}</p>
                         {product.compare_at_price && (
                           <p className="text-xs text-muted-foreground line-through">
-                            {formatPrice(product.compare_at_price)}
+                            {formatConvertedPrice(product.compare_at_price, 'NGN')}
                           </p>
                         )}
                       </td>

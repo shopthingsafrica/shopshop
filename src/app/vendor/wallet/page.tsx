@@ -150,7 +150,7 @@ const STATUS_COLORS: Record<string, { icon: string; bg: string; text: string }> 
 };
 
 export default function VendorWalletPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'transactions' | 'withdraw' | 'payment-methods'>('transactions');
   const [withdrawAmount, setWithdrawAmount] = useState('');
@@ -280,7 +280,7 @@ export default function VendorWalletPage() {
                 <span className="text-sm bg-white/20 px-2 py-1 rounded-full">Available</span>
               </div>
               <p className="text-sm text-white/80 mb-1">Available Balance</p>
-              <p className="text-3xl font-bold">{formatPrice(WALLET_DATA.available_balance)}</p>
+              <p className="text-3xl font-bold">{formatConvertedPrice(WALLET_DATA.available_balance, 'NGN')}</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -289,7 +289,7 @@ export default function VendorWalletPage() {
                 <span className="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Pending</span>
               </div>
               <p className="text-sm text-muted-foreground mb-1">Pending Balance</p>
-              <p className="text-2xl font-bold text-foreground">{formatPrice(WALLET_DATA.pending_balance)}</p>
+              <p className="text-2xl font-bold text-foreground">{formatConvertedPrice(WALLET_DATA.pending_balance, 'NGN')}</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -297,7 +297,7 @@ export default function VendorWalletPage() {
                 <TrendingUp className="w-10 h-10 text-green-500" />
               </div>
               <p className="text-sm text-muted-foreground mb-1">Total Earned</p>
-              <p className="text-2xl font-bold text-green-600">{formatPrice(WALLET_DATA.total_earned)}</p>
+              <p className="text-2xl font-bold text-green-600">{formatConvertedPrice(WALLET_DATA.total_earned, 'NGN')}</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -305,7 +305,7 @@ export default function VendorWalletPage() {
                 <ArrowUpRight className="w-10 h-10 text-blue-500" />
               </div>
               <p className="text-sm text-muted-foreground mb-1">Total Withdrawn</p>
-              <p className="text-2xl font-bold text-blue-600">{formatPrice(WALLET_DATA.total_withdrawn)}</p>
+              <p className="text-2xl font-bold text-blue-600">{formatConvertedPrice(WALLET_DATA.total_withdrawn, 'NGN')}</p>
             </div>
           </div>
 
@@ -395,7 +395,7 @@ export default function VendorWalletPage() {
                         <p className={`font-bold ${
                           transaction.type === 'credit' ? 'text-green-600' : 'text-foreground'
                         }`}>
-                          {transaction.type === 'credit' ? '+' : '-'}{formatPrice(transaction.amount)}
+                          {transaction.type === 'credit' ? '+' : '-'}{formatConvertedPrice(transaction.amount, 'NGN')}
                         </p>
                       </div>
                     );
@@ -431,7 +431,7 @@ export default function VendorWalletPage() {
                       />
                     </div>
                     <p className="text-sm text-muted-foreground mt-2">
-                      Available: <span className="font-medium text-foreground">{formatPrice(WALLET_DATA.available_balance)}</span>
+                      Available: <span className="font-medium text-foreground">{formatConvertedPrice(WALLET_DATA.available_balance, 'NGN')}</span>
                     </p>
                   </div>
 
@@ -447,7 +447,7 @@ export default function VendorWalletPage() {
                           onClick={() => setWithdrawAmount(amount.toString())}
                           className="px-4 py-2 border rounded-lg text-sm hover:border-secondary hover:text-secondary transition-colors"
                         >
-                          {formatPrice(amount)}
+                          {formatConvertedPrice(amount, 'NGN')}
                         </button>
                       ))}
                     </div>
@@ -506,7 +506,7 @@ export default function VendorWalletPage() {
                   <div className="bg-gray-50 rounded-lg p-4 space-y-2">
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Withdrawal Amount</span>
-                      <span>{formatPrice(Number(withdrawAmount) || 0)}</span>
+                      <span>{formatConvertedPrice(Number(withdrawAmount) || 0, 'NGN')}</span>
                     </div>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">Processing Fee</span>
@@ -515,7 +515,7 @@ export default function VendorWalletPage() {
                     <div className="flex items-center justify-between font-bold pt-2 border-t">
                       <span>You&apos;ll Receive</span>
                       <span className="text-primary">
-                        {formatPrice(Math.max(0, (Number(withdrawAmount) || 0) - 50))}
+                        {formatConvertedPrice(Math.max(0, (Number(withdrawAmount) || 0) - 50), 'NGN')}
                       </span>
                     </div>
                   </div>

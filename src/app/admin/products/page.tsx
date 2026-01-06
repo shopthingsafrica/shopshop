@@ -176,7 +176,7 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; i
 };
 
 export default function AdminProductsPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
@@ -492,11 +492,11 @@ export default function AdminProductsPage() {
                               {product.category}
                             </span>
                             <span className="font-medium text-primary">
-                              {formatPrice(product.price)}
+                              {formatConvertedPrice(product.price, 'NGN')}
                             </span>
                             {product.compare_at_price && (
                               <span className="text-muted-foreground line-through">
-                                {formatPrice(product.compare_at_price)}
+                                {formatConvertedPrice(product.compare_at_price, 'NGN')}
                               </span>
                             )}
                           </div>
@@ -628,10 +628,10 @@ export default function AdminProductsPage() {
                             <p className="text-sm font-medium text-muted-foreground mb-2">Pricing</p>
                             <div className="flex items-center gap-2">
                               <DollarSign className="w-4 h-4 text-gray-400" />
-                              <span className="text-xl font-bold text-primary">{formatPrice(product.price)}</span>
+                              <span className="text-xl font-bold text-primary">{formatConvertedPrice(product.price, 'NGN')}</span>
                               {product.compare_at_price && (
                                 <span className="text-sm text-muted-foreground line-through">
-                                  {formatPrice(product.compare_at_price)}
+                                  {formatConvertedPrice(product.compare_at_price, 'NGN')}
                                 </span>
                               )}
                             </div>

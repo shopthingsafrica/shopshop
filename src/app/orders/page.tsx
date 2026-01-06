@@ -87,7 +87,7 @@ const statusConfig = {
 };
 
 export default function OrdersPage() {
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
 
   if (MOCK_ORDERS.length === 0) {
     return (
@@ -212,7 +212,7 @@ export default function OrdersPage() {
                   <div className="flex items-center gap-4">
                     <div className="text-right">
                       <p className="font-bold text-lg text-primary">
-                        {formatPrice(order.total)}
+                        {formatConvertedPrice(order.total, 'NGN')}
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {order.itemCount} {order.itemCount === 1 ? 'item' : 'items'}

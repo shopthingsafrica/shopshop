@@ -18,12 +18,19 @@ import {
 import { Button, Input } from '@/components/ui';
 import { useCartStore, useCurrencyStore } from '@/stores';
 import { getProductImage } from '@/lib/placeholders';
+import type { CurrencyCode } from '@/types';
 
 type CheckoutStep = 'shipping' | 'payment' | 'review';
 
+// Helper to format cart item prices with conversion
+const formatItemPrice = (price: number, currency: string, formatFn: (price: number, from: CurrencyCode) => string) => {
+  const currencyCode = (currency === 'USD' || currency === 'NGN') ? currency : 'NGN';
+  return formatFn(price, currencyCode as CurrencyCode);
+};
+
 export default function CheckoutPage() {
   const { items, getSubtotal, clearCart } = useCartStore();
-  const { formatPrice } = useCurrencyStore();
+  const { formatConvertedPrice } = useCurrencyStore();
   const [currentStep, setCurrentStep] = useState<CheckoutStep>('shipping');
   const [isProcessing, setIsProcessing] = useState(false);
 
@@ -408,7 +415,7 @@ export default function CheckoutPage() {
                           <p className="font-medium">{item.product.name}</p>
                           <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
                         </div>
-                        <p className="font-medium">{formatPrice(item.product.price * item.quantity)}</p>
+                        <p className="font-medium">{formatItemPrice(item.product.price * item.quantity, item.product.currency, formatConvertedPrice)}</p>
                       </div>
                     ))}
                   </div>
@@ -447,7 +454,7 @@ export default function CheckoutPage() {
                     <span className="text-muted-foreground">
                       {item.product.name} × {item.quantity}
                     </span>
-                    <span>{formatPrice(item.product.price * item.quantity)}</span>
+                    <span>{formatItemPrice(item.product.price * item.quantity, item.product.currency, formatConvertedPrice)}</span>
                   </div>
                 ))}
               </div>
@@ -455,17 +462,17 @@ export default function CheckoutPage() {
               <div className="space-y-3 py-4 border-b border-border">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Subtotal</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span>{formatConvertedPrice(subtotal, 'NGN')}</span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Shipping</span>
-                  <span>{shipping === 0 ? 'Free' : formatPrice(shipping)}</span>
+                  <span>{shipping === 0 ? 'Free' : formatConvertedPrice(shipping, 'NGN')}</span>
                 </div>
               </div>
 
               <div className="flex justify-between py-4 text-lg font-bold">
                 <span>Total</span>
-                <span className="text-primary">{formatPrice(total)}</span>
+                <span className="text-primary">{formatConvertedPrice(total, 'NGN')}</span>
               </div>
 
               <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
