@@ -24,7 +24,7 @@ type CheckoutStep = 'shipping' | 'payment' | 'review';
 
 // Helper to format cart item prices with conversion
 const formatItemPrice = (price: number, currency: string, formatFn: (price: number, from: CurrencyCode) => string) => {
-  const currencyCode = (currency === 'USD' || currency === 'NGN') ? currency : 'NGN';
+  const currencyCode = (['USD', 'NGN', 'GBP', 'EUR'] as const).includes(currency as any) ? currency : 'NGN';
   return formatFn(price, currencyCode as CurrencyCode);
 };
 
