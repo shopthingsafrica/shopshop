@@ -25,10 +25,10 @@ export const metadata: Metadata = {
   keywords: ["African marketplace", "African products", "African fashion", "African art", "e-commerce"],
   icons: {
     icon: [
-      { url: '/images/logo.jpeg', type: 'image/jpeg' },
+      { url: '/images/logo.png', type: 'image/png' },
     ],
     apple: [
-      { url: '/images/logo.jpeg', type: 'image/jpeg' },
+      { url: '/images/logo.png', type: 'image/png' },
     ],
   },
 };
