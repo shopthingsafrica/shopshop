@@ -18,154 +18,11 @@ import { Header, Footer } from '@/components/layout';
 import { ProductCard } from '@/components/products';
 import { Button, Input, Select, Checkbox } from '@/components/ui';
 import { useCurrencyStore } from '@/stores';
+import { getProducts } from '@/lib/products';
+import { ProductWithDetails } from '@/types';
 
-// Mock data for products
-const MOCK_PRODUCTS = [
-  {
-    id: '1',
-    name: 'Handwoven Kente Cloth',
-    slug: 'handwoven-kente-cloth',
-    description: 'Traditional Ghanaian kente cloth handwoven by master artisans',
-    price: 45000,
-    compare_at_price: 55000,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.8,
-    review_count: 124,
-    is_featured: true,
-    created_at: '2024-01-01',
-    stock_quantity: 15,
-    category: { id: '1', name: 'Fashion', slug: 'fashion' },
-    vendor: { id: '1', store_name: 'Accra Textiles', logo_url: null, is_verified: true },
-  },
-  {
-    id: '2',
-    name: 'Ankara Print Maxi Dress',
-    slug: 'ankara-print-maxi-dress',
-    description: 'Beautiful ankara print maxi dress perfect for any occasion',
-    price: 28000,
-    compare_at_price: null,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.6,
-    review_count: 89,
-    is_featured: false,
-    created_at: '2024-01-02',
-    stock_quantity: 25,
-    category: { id: '1', name: 'Fashion', slug: 'fashion' },
-    vendor: { id: '2', store_name: 'Lagos Fashion House', logo_url: null, is_verified: true },
-  },
-  {
-    id: '3',
-    name: 'Shea Butter Body Cream',
-    slug: 'shea-butter-body-cream',
-    description: 'Natural shea butter body cream from Ghana',
-    price: 8500,
-    compare_at_price: 10000,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.9,
-    review_count: 256,
-    is_featured: true,
-    created_at: '2024-01-03',
-    stock_quantity: 100,
-    category: { id: '2', name: 'Beauty', slug: 'beauty' },
-    vendor: { id: '3', store_name: 'Natural Ghana', logo_url: null, is_verified: true },
-  },
-  {
-    id: '4',
-    name: 'Beaded Statement Necklace',
-    slug: 'beaded-statement-necklace',
-    description: 'Handcrafted beaded necklace with traditional African patterns',
-    price: 15000,
-    compare_at_price: null,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.5,
-    review_count: 67,
-    is_featured: false,
-    created_at: '2024-01-04',
-    stock_quantity: 30,
-    category: { id: '3', name: 'Accessories', slug: 'accessories' },
-    vendor: { id: '4', store_name: 'Nairobi Crafts', logo_url: null, is_verified: false },
-  },
-  {
-    id: '5',
-    name: 'African Drum (Djembe)',
-    slug: 'african-drum-djembe',
-    description: 'Authentic hand-carved djembe drum from Mali',
-    price: 75000,
-    compare_at_price: 85000,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.7,
-    review_count: 45,
-    is_featured: true,
-    created_at: '2024-01-05',
-    stock_quantity: 8,
-    category: { id: '4', name: 'Art & Crafts', slug: 'art-crafts' },
-    vendor: { id: '5', store_name: 'Mali Instruments', logo_url: null, is_verified: true },
-  },
-  {
-    id: '6',
-    name: 'Dashiki Shirt - Men',
-    slug: 'dashiki-shirt-men',
-    description: 'Classic dashiki shirt with vibrant colors',
-    price: 18000,
-    compare_at_price: null,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.4,
-    review_count: 112,
-    is_featured: false,
-    created_at: '2024-01-06',
-    stock_quantity: 50,
-    category: { id: '1', name: 'Fashion', slug: 'fashion' },
-    vendor: { id: '2', store_name: 'Lagos Fashion House', logo_url: null, is_verified: true },
-  },
-  {
-    id: '7',
-    name: 'Moringa Oil - Hair & Skin',
-    slug: 'moringa-oil-hair-skin',
-    description: 'Pure moringa oil for hair and skin nourishment',
-    price: 12000,
-    compare_at_price: 15000,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.8,
-    review_count: 189,
-    is_featured: false,
-    created_at: '2024-01-07',
-    stock_quantity: 75,
-    category: { id: '2', name: 'Beauty', slug: 'beauty' },
-    vendor: { id: '3', store_name: 'Natural Ghana', logo_url: null, is_verified: true },
-  },
-  {
-    id: '8',
-    name: 'Wooden Carved Mask',
-    slug: 'wooden-carved-mask',
-    description: 'Traditional wooden carved mask from Nigeria',
-    price: 35000,
-    compare_at_price: null,
-    currency: 'NGN',
-    images: [],
-    status: 'active',
-    average_rating: 4.6,
-    review_count: 34,
-    is_featured: false,
-    created_at: '2024-01-08',
-    stock_quantity: 20,
-    category: { id: '4', name: 'Art & Crafts', slug: 'art-crafts' },
-    vendor: { id: '6', store_name: 'Benin Arts', logo_url: null, is_verified: true },
-  },
-];
+// Mock data removed in favor of Supabase fetching
+
 
 const CATEGORIES = [
   { id: '1', name: 'Fashion', slug: 'fashion', count: 245 },
@@ -196,15 +53,33 @@ function ProductsContent() {
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   
+  const [products, setProducts] = useState<ProductWithDetails[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      setIsLoading(true);
+      try {
+        const data = await getProducts();
+        setProducts(data);
+      } catch (error) {
+        console.error('Failed to fetch products', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchProducts();
+  }, []);
+  
   const searchQuery = searchParams.get('search') || '';
   const categorySlug = searchParams.get('category') || '';
   
   const productsPerPage = 12;
-  const totalProducts = MOCK_PRODUCTS.length;
+  const totalProducts = products.length;
   const totalPages = Math.ceil(totalProducts / productsPerPage);
 
   // Filter and sort products
-  const filteredProducts = MOCK_PRODUCTS.filter(product => {
+  const filteredProducts = products.filter(product => {
     if (searchQuery && !product.name.toLowerCase().includes(searchQuery.toLowerCase())) {
       return false;
     }
@@ -439,7 +314,13 @@ function ProductsContent() {
             )}
 
             {/* Products Grid */}
-            {filteredProducts.length > 0 ? (
+            {isLoading ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-96 bg-gray-100 animate-pulse rounded-lg"></div>
+                ))}
+              </div>
+            ) : filteredProducts.length > 0 ? (
               <div className={
                 viewMode === 'grid' 
                   ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'

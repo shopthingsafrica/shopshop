@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { ArrowRight, BadgeCheck, ShoppingBag, Truck, Shield, HeartHandshake, Sparkles, Flame } from 'lucide-react';
 import { Button } from '@/components/ui';
 import ProductCard from '@/components/products/ProductCard';
+import { getFeaturedProducts, getProducts } from '@/lib/products';
 
 // Featured categories - only 4 to match mockup
 const FEATURED_CATEGORIES = [
