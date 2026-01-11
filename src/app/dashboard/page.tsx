@@ -155,7 +155,7 @@ export default async function CustomerDashboard() {
               className='group bg-white rounded-2xl p-6 border border-border/50 hover:border-secondary/30 hover:shadow-xl hover:shadow-secondary/5 transition-all duration-300 hover:-translate-y-1'
             >
               <div className='flex items-start justify-between'>
-                <div className={\p-3.5 rounded-xl \ shadow-lg shadow-\/20\}>
+                <div className={`p-3.5 rounded-xl ${link.color} shadow-lg`}>
                   <link.icon className='w-6 h-6 text-white' />
                 </div>
                 <ChevronRight className='w-5 h-5 text-muted-foreground/50 group-hover:text-secondary group-hover:translate-x-1 transition-all duration-200' />
