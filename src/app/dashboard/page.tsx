@@ -75,21 +75,21 @@ export default async function CustomerDashboard() {
   const quickLinks = [
     {
       title: 'My Orders',
-      description: \\ orders\,
+      description: `${ordersCount || 0} orders`,
       icon: Package,
       href: '/orders',
       color: 'bg-blue-500',
     },
     {
       title: 'Wishlist',
-      description: \\ items saved\,
+      description: `${wishlistCount || 0} items saved`,
       icon: Heart,
       href: '/wishlist',
       color: 'bg-pink-500',
     },
     {
       title: 'Addresses',
-      description: \\ addresses\,
+      description: `${addressesCount || 0} addresses`,
       icon: MapPin,
       href: '/account/addresses',
       color: 'bg-green-500',
