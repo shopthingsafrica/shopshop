@@ -74,8 +74,38 @@ export default function ProfilePage() {
       }));
     } else {
       console.error(result.error);
-      // specific error handling if needed
     }
+  };
+
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+
+  const [passwordData, setPasswordData] = useState({
+    current_password: '',
+    new_password: '',
+    confirm_password: '',
+  });
+
+  const [notifications, setNotifications] = useState({
+    email_orders: true,
+    email_promotions: false,
+    email_newsletter: true,
+    push_orders: true,
+    push_promotions: false,
+    sms_orders: false,
+  });
+
+  const handlePasswordChange = () => {
+    // Mock password change for now
+    setPasswordData({
+      current_password: '',
+      new_password: '',
+      confirm_password: '',
+    });
+    setShowPasswordForm(false);
+    setSaveSuccess(true);
+    setTimeout(() => setSaveSuccess(false), 3000);
   };
 
   const TABS = [
@@ -177,29 +207,41 @@ export default function ProfilePage() {
 
                 {/* Avatar */}
                 <div className="flex items-center gap-6 mb-8 pb-8 border-b border-border">
-                  <div className="relative">
-                    <div className="w-24 h-24 rounded-full bg-linear-to-br from-secondary to-primary flex items-center justify-center">
-                      <span className="text-3xl font-bold text-white">
-                        {MOCK_USER.first_name.charAt(0)}{MOCK_USER.last_name.charAt(0)}
-                      </span>
+                  {isLoading ? (
+                    <div className="flex items-center gap-6 w-full">
+                      <div className="w-24 h-24 rounded-full bg-gray-200 animate-pulse" />
+                      <div className="space-y-2">
+                        <div className="h-6 w-48 bg-gray-200 animate-pulse rounded" />
+                        <div className="h-4 w-32 bg-gray-200 animate-pulse rounded" />
+                      </div>
                     </div>
-                    {isEditing && (
-                      <button 
-                        className="absolute bottom-0 right-0 w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-secondary/90 transition-colors"
-                        aria-label="Change profile picture"
-                      >
-                        <Camera className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold">
-                      {MOCK_USER.first_name} {MOCK_USER.last_name}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Member since {new Date(MOCK_USER.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                    </p>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="relative">
+                        <div className="w-24 h-24 rounded-full bg-linear-to-br from-secondary to-primary flex items-center justify-center">
+                          <span className="text-3xl font-bold text-white">
+                            {(formData.first_name?.[0] || '').toUpperCase()}{(formData.last_name?.[0] || '').toUpperCase()}
+                          </span>
+                        </div>
+                        {isEditing && (
+                          <button 
+                            className="absolute bottom-0 right-0 w-8 h-8 bg-secondary text-white rounded-full flex items-center justify-center shadow-lg hover:bg-secondary/90 transition-colors"
+                            aria-label="Change profile picture"
+                          >
+                            <Camera className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold">
+                          {formData.first_name} {formData.last_name}
+                        </h3>
+                        <p className="text-muted-foreground">
+                          Member since {userProfile?.created_at ? new Date(userProfile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : ''}
+                        </p>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Form Fields */}
@@ -237,17 +279,13 @@ export default function ProfilePage() {
                         <Input
                           type="email"
                           value={formData.email}
-                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          disabled={true} // Email changes require re-verification
+                          className="opacity-70 cursor-not-allowed"
+                          title="Contact support to change email"
                         />
                       ) : (
                         <div className="flex items-center justify-between px-4 py-2 bg-muted rounded-lg">
                           <span>{formData.email}</span>
-                          {MOCK_USER.email_verified && (
-                            <span className="flex items-center gap-1 text-xs text-success">
-                              <Check className="w-3 h-3" />
-                              Verified
-                            </span>
-                          )}
                         </div>
                       )}
                     </div>
@@ -264,12 +302,7 @@ export default function ProfilePage() {
                         />
                       ) : (
                         <div className="flex items-center justify-between px-4 py-2 bg-muted rounded-lg">
-                          <span>{formData.phone}</span>
-                          {!MOCK_USER.phone_verified && (
-                            <button className="text-xs text-secondary hover:underline">
-                              Verify
-                            </button>
-                          )}
+                          <span>{formData.phone || 'Not provided'}</span>
                         </div>
                       )}
                     </div>
@@ -371,13 +404,13 @@ export default function ProfilePage() {
                       <div>
                         <h3 className="font-medium">Two-Factor Authentication</h3>
                         <p className="text-sm text-muted-foreground">
-                          {MOCK_USER.two_factor_enabled 
+                          {userProfile?.two_factor_enabled 
                             ? 'Your account is protected with 2FA' 
                             : 'Add an extra layer of security'}
                         </p>
                       </div>
                     </div>
-                    {MOCK_USER.two_factor_enabled ? (
+                    {userProfile?.two_factor_enabled ? (
                       <span className="flex items-center gap-1 text-sm text-success">
                         <Check className="w-4 h-4" />
                         Enabled
