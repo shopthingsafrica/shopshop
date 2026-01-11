@@ -104,8 +104,64 @@ export default function AdminDashboardPage() {
   const { formatConvertedPrice } = useCurrencyStore();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedRange, setSelectedRange] = useState('7D');
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadStats() {
+      try {
+        const data = await getAdminDashboardStats();
+        setStats(data);
+      } catch (error) {
+        console.error('Failed to load dashboard stats:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadStats();
+  }, []);
 
   const maxUsers = Math.max(...USER_GROWTH.map(d => d.users));
+
+  const statsCards = [
+    {
+      label: 'Total Users',
+      value: stats?.totalUsers.toLocaleString() || '0',
+      change: '+12.5%', // Placeholder for trend
+      trend: 'up',
+      icon: Users,
+      iconBg: 'bg-blue-100',
+      iconColor: 'text-blue-600',
+    },
+    {
+      label: 'Active Vendors',
+      value: stats?.activeVendors.toLocaleString() || '0',
+      change: '+8.3%', // Placeholder for trend
+      trend: 'up',
+      icon: Store,
+      iconBg: 'bg-green-100',
+      iconColor: 'text-green-600',
+    },
+    {
+      label: 'Total Products',
+      value: stats?.totalProducts.toLocaleString() || '0',
+      change: '+23.1%', // Placeholder for trend
+      trend: 'up',
+      icon: Package,
+      iconBg: 'bg-purple-100',
+      iconColor: 'text-purple-600',
+    },
+    {
+      label: 'Sales Volume',
+      value: stats?.salesVolume || 0,
+      change: '+15.7%', // Placeholder for trend
+      trend: 'up',
+      icon: DollarSign,
+      iconBg: 'bg-yellow-100',
+      iconColor: 'text-yellow-600',
+      isCurrency: true,
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -252,7 +308,7 @@ export default function AdminDashboardPage() {
         <main className="p-4 lg:p-6 space-y-6">
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {STATS.map((stat) => {
+            {statsCards.map((stat) => {
               const Icon = stat.icon;
               return (
                 <div key={stat.label} className="bg-white rounded-xl p-6 shadow-sm">
