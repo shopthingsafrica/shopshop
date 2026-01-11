@@ -78,7 +78,7 @@ export default function TwoFactorSetupPage() {
     if (res.error) {
         setError(res.error);
     } else {
-        setStep('backup');
+        setStep('complete');
     }
   };
 
@@ -117,24 +117,24 @@ export default function TwoFactorSetupPage() {
         {/* Progress Steps */}
         {step !== 'complete' && (
           <div className="flex items-center justify-center gap-2 mb-8">
-            {['choose', 'setup', 'verify', 'backup'].map((s, i) => (
+            {['choose', 'setup', 'verify'].map((s, i) => (
               <div key={s} className="flex items-center">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                   step === s 
                     ? 'bg-secondary text-white' 
-                    : ['choose', 'setup', 'verify', 'backup'].indexOf(step) > i
+                    : ['choose', 'setup', 'verify'].indexOf(step) > i
                       ? 'bg-success text-white'
                       : 'bg-muted text-muted-foreground'
                 }`}>
-                  {['choose', 'setup', 'verify', 'backup'].indexOf(step) > i ? (
+                  {['choose', 'setup', 'verify'].indexOf(step) > i ? (
                     <CheckCircle className="w-5 h-5" />
                   ) : (
                     i + 1
                   )}
                 </div>
-                {i < 3 && (
+                {i < 2 && (
                   <div className={`w-12 h-1 mx-1 ${
-                    ['choose', 'setup', 'verify', 'backup'].indexOf(step) > i
+                    ['choose', 'setup', 'verify'].indexOf(step) > i
                       ? 'bg-success'
                       : 'bg-muted'
                   }`} />
@@ -229,17 +229,12 @@ export default function TwoFactorSetupPage() {
 
                   {/* QR Code Placeholder */}
                   <div className="flex justify-center">
-                    <div className="w-48 h-48 bg-muted rounded-xl flex items-center justify-center border-2 border-dashed border-border">
-                      <div className="text-center">
-                        <div className="grid grid-cols-5 gap-1 p-4">
-                          {[1,0,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,1,1,0,0,1,0,1,1].map((v, i) => (
-                            <div 
-                              key={i} 
-                              className={`w-6 h-6 ${v ? 'bg-primary' : 'bg-white'}`}
-                            />
-                          ))}
-                        </div>
-                      </div>
+                    <div className="w-48 h-48 bg-white rounded-xl flex items-center justify-center border border-border overflow-hidden">
+                       {qrCode ? (
+                           <img src={qrCode} alt="QR Code" className="w-full h-full object-contain" />
+                       ) : (
+                           <div className="animate-pulse w-full h-full bg-gray-100 flex items-center justify-center text-xs text-gray-400">Loading QR...</div>
+                       )}
                     </div>
                   </div>
 
@@ -250,7 +245,7 @@ export default function TwoFactorSetupPage() {
                     </p>
                     <div className="flex items-center gap-2">
                       <code className="flex-1 font-mono text-sm bg-white px-3 py-2 rounded border border-border">
-                        {showSecret ? MOCK_SECRET : '••••••••••••••••'}
+                        {showSecret ? secret : '••••••••••••••••'}
                       </code>
                       <button
                         onClick={() => setShowSecret(!showSecret)}
@@ -369,9 +364,9 @@ export default function TwoFactorSetupPage() {
                 variant="primary"
                 className="w-full"
                 onClick={handleVerify}
-                disabled={verificationCode.length !== 6}
+                disabled={verificationCode.length !== 6 || isLoading}
               >
-                Verify
+                {isLoading ? 'Verifying...' : 'Verify'}
               </Button>
 
               {method !== 'authenticator' && (
@@ -397,7 +392,7 @@ export default function TwoFactorSetupPage() {
 
               <div className="bg-muted rounded-lg p-4">
                 <div className="grid grid-cols-2 gap-2">
-                  {MOCK_BACKUP_CODES.map((code, i) => (
+                  {backupCodes.map((code, i) => (
                     <code key={i} className="bg-white px-3 py-2 rounded text-sm font-mono text-center">
                       {code}
                     </code>
@@ -427,7 +422,7 @@ export default function TwoFactorSetupPage() {
                   variant="outline"
                   className="flex-1"
                   onClick={() => {
-                    const text = MOCK_BACKUP_CODES.join('\n');
+                    const text = backupCodes.join('\n');
                     const blob = new Blob([text], { type: 'text/plain' });
                     const url = URL.createObjectURL(blob);
                     const a = document.createElement('a');
