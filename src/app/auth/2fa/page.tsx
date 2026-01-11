@@ -151,39 +151,6 @@ export default function TwoFactorSetupPage() {
                   <p className="text-sm text-muted-foreground mt-1">
                     Use an app like Google Authenticator or Authy to generate verification codes
                   </p>
-                  <span className="inline-block mt-2 text-xs bg-success/10 text-success px-2 py-1 rounded-full">
-                    Recommended
-                  </span>
-                </div>
-              </button>
-
-              <button
-                onClick={() => handleMethodSelect('sms')}
-                className="w-full p-4 border border-border rounded-xl hover:border-secondary hover:bg-secondary/5 transition-colors text-left flex items-start gap-4"
-              >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Smartphone className="w-6 h-6 text-blue-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium">SMS Text Message</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Receive verification codes via text message to your phone
-                  </p>
-                </div>
-              </button>
-
-              <button
-                onClick={() => handleMethodSelect('email')}
-                className="w-full p-4 border border-border rounded-xl hover:border-secondary hover:bg-secondary/5 transition-colors text-left flex items-start gap-4"
-              >
-                <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center shrink-0">
-                  <Mail className="w-6 h-6 text-purple-600" />
-                </div>
-                <div>
-                  <h3 className="font-medium">Email</h3>
-                  <p className="text-sm text-muted-foreground mt-1">
-                    Receive verification codes via email
-                  </p>
                 </div>
               </button>
 
@@ -261,47 +228,6 @@ export default function TwoFactorSetupPage() {
                 </>
               )}
 
-              {method === 'sms' && (
-                <>
-                  <div>
-                    <h2 className="text-lg font-semibold">Set up SMS Verification</h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      We&apos;ll send verification codes to your phone number
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Phone Number</label>
-                    <Input
-                      type="tel"
-                      placeholder="+1 (555) 123-4567"
-                      className="w-full"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Standard message and data rates may apply
-                    </p>
-                  </div>
-                </>
-              )}
-
-              {method === 'email' && (
-                <>
-                  <div>
-                    <h2 className="text-lg font-semibold">Set up Email Verification</h2>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      We&apos;ll send verification codes to your email address
-                    </p>
-                  </div>
-
-                  <div className="bg-muted rounded-lg p-4">
-                    <p className="text-sm text-muted-foreground">
-                      Codes will be sent to:
-                    </p>
-                    <p className="font-medium mt-1">user@example.com</p>
-                  </div>
-                </>
-              )}
-
               <Button
                 variant="primary"
                 className="w-full"
@@ -326,9 +252,7 @@ export default function TwoFactorSetupPage() {
               <div>
                 <h2 className="text-lg font-semibold">Enter Verification Code</h2>
                 <p className="text-sm text-muted-foreground mt-1">
-                  {method === 'authenticator' && 'Enter the 6-digit code from your authenticator app'}
-                  {method === 'sms' && 'Enter the 6-digit code we sent to your phone'}
-                  {method === 'email' && 'Enter the 6-digit code we sent to your email'}
+                  Enter the 6-digit code from your authenticator app
                 </p>
               </div>
 
