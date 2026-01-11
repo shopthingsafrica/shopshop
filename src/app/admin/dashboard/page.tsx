@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { getAdminDashboardStats, type DashboardStats } from '../actions';
 import {
   Store,
   Package,
