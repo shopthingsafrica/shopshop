@@ -388,6 +388,8 @@ export default function ProfilePage() {
 
                   {showPasswordForm && (
                     <div className="mt-6 pt-6 border-t border-border space-y-4">
+                      {passwordError && <p className="text-red-500 text-sm bg-red-50 p-2 rounded">{passwordError}</p>}
+                      {passwordSuccess && <p className="text-green-500 text-sm bg-green-50 p-2 rounded">{passwordSuccess}</p>}
                       <div>
                         <label className="block text-sm font-medium mb-2">Current Password</label>
                         <div className="relative">
@@ -462,10 +464,15 @@ export default function ProfilePage() {
                       </div>
                     </div>
                     {userProfile?.two_factor_enabled ? (
-                      <span className="flex items-center gap-1 text-sm text-success">
-                        <Check className="w-4 h-4" />
-                        Enabled
-                      </span>
+                        <div className="flex items-center gap-4">
+                          <span className="flex items-center gap-1 text-sm text-success">
+                            <Check className="w-4 h-4" />
+                            Enabled
+                          </span>
+                          <Button variant="outline" size="sm" onClick={handleDisable2FA} className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200">
+                             Disable
+                          </Button>
+                        </div>
                     ) : (
                       <Link href="/auth/2fa">
                         <Button variant="outline" size="sm">

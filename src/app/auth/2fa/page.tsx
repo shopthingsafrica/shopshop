@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { enrollTwoFactor, verifyTwoFactor } from '@/app/account/actions';
 import { 
   Shield, 
   Smartphone, 
@@ -19,18 +20,6 @@ import { Button, Input } from '@/components/ui';
 type TwoFactorMethod = 'authenticator' | 'sms' | 'email';
 type SetupStep = 'choose' | 'setup' | 'verify' | 'backup' | 'complete';
 
-const MOCK_SECRET = 'JBSWY3DPEHPK3PXP';
-const MOCK_BACKUP_CODES = [
-  'A1B2C3D4',
-  'E5F6G7H8',
-  'I9J0K1L2',
-  'M3N4O5P6',
-  'Q7R8S9T0',
-  'U1V2W3X4',
-  'Y5Z6A7B8',
-  'C9D0E1F2',
-];
-
 export default function TwoFactorSetupPage() {
   const router = useRouter();
   const [method, setMethod] = useState<TwoFactorMethod>('authenticator');
@@ -39,40 +28,74 @@ export default function TwoFactorSetupPage() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [showSecret, setShowSecret] = useState(false);
+  
+  // Real 2FA State
+  const [factorId, setFactorId] = useState('');
+  const [secret, setSecret] = useState('');
+  const [qrCode, setQrCode] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Mock backup codes for now as Supabase doesn't generate them natively in the same flow easily without extra implementation
+  // We will generate them optionally or just skip that step for MVP as Supabase MFA is the focus
+  const [backupCodes] = useState(Array.from({length: 8}, () => Math.random().toString(36).substr(2, 8).toUpperCase()));
   const [copiedCodes, setCopiedCodes] = useState(false);
 
-  const handleMethodSelect = (selectedMethod: TwoFactorMethod) => {
+  const handleMethodSelect = async (selectedMethod: TwoFactorMethod) => {
     setMethod(selectedMethod);
-    setStep('setup');
+    if(selectedMethod === 'authenticator') {
+        setIsLoading(true);
+        const res = await enrollTwoFactor();
+        setIsLoading(false);
+
+        if(res.error) {
+            setError(res.error);
+            return;
+        }
+
+        if(res.data) {
+            setFactorId(res.data.id);
+            setSecret(res.data.totp.secret);
+            setQrCode(res.data.totp.qr_code);
+            setStep('setup');
+        }
+    } else {
+        // Only authenticator supported for now
+        alert('Only Authenticator App method is currently supported.');
+    }
   };
 
-  const handleVerify = () => {
+  const handleVerify = async () => {
+    setError('');
     if (verificationCode.length !== 6) {
       setError('Please enter a 6-digit code');
       return;
     }
-    // Mock verification - in real app, verify with backend
-    if (verificationCode === '123456') {
-      setStep('backup');
+    
+    setIsLoading(true);
+    const res = await verifyTwoFactor(factorId, verificationCode);
+    setIsLoading(false);
+
+    if (res.error) {
+        setError(res.error);
     } else {
-      setError('Invalid verification code. Try 123456 for demo.');
+        setStep('backup');
     }
   };
 
   const copySecret = async () => {
-    await navigator.clipboard.writeText(MOCK_SECRET);
+    await navigator.clipboard.writeText(secret);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const copyBackupCodes = async () => {
-    await navigator.clipboard.writeText(MOCK_BACKUP_CODES.join('\n'));
+    await navigator.clipboard.writeText(backupCodes.join('\n'));
     setCopiedCodes(true);
     setTimeout(() => setCopiedCodes(false), 2000);
   };
 
   const handleComplete = () => {
-    setStep('complete');
+    router.push('/account/profile');
   };
 
   return (
