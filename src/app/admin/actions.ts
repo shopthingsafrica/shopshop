@@ -1,7 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import { Database } from '@/types/database';
+import { revalidatePath } from 'next/cache';
 
 export type DashboardStats = {
   totalUsers: number;
@@ -64,7 +64,6 @@ export async function getAdminDashboardStats(): Promise<DashboardStats> {
   const end = Date.now();
   const dbLatency = end - start;
 
-  // Calculate Financials
   const totalRevenue = salesData?.reduce((acc, order) => acc + (order.total || 0), 0) || 0;
   const totalVendorEarnings = walletSales?.reduce((acc, tx) => acc + (tx.amount || 0), 0) || 0;
   const totalVendorPayouts = walletWithdrawals?.reduce((acc, tx) => acc + (tx.amount || 0), 0) || 0;
@@ -74,21 +73,21 @@ export async function getAdminDashboardStats(): Promise<DashboardStats> {
     ...(recentOrders?.map(o => ({
       id: o.id,
       type: 'order_completed',
-      message: \Order #\ completed\,
+      message: `Order #${o.order_number} completed`,
       time: o.created_at,
       rawTime: new Date(o.created_at).getTime()
     })) || []),
     ...(recentVendors?.map(v => ({
       id: v.id,
       type: 'vendor_registered',
-      message: \New vendor registration: \\,
+      message: `New vendor registration: ${v.store_name}`,
       time: v.created_at,
       rawTime: new Date(v.created_at).getTime()
     })) || []),
     ...(recentProducts?.map(p => ({
       id: p.id,
       type: 'product_submitted',
-      message: \Product submitted: \\,
+      message: `Product submitted: ${p.name}`,
       time: p.created_at,
       rawTime: new Date(p.created_at).getTime()
     })) || [])
@@ -180,12 +179,11 @@ export async function getAdminUsersList(page = 1, limit = 50, search = '') {
   let query = supabase.from('profiles').select('*, orders(count)');
 
   if (search) {
-    query = query.or(\ull_name.ilike.%\%,email.ilike.%\%\);
+    query = query.or(`full_name.ilike.%${search}%,email.ilike.%${search}%`);
   }
 
   const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
 
-  // Note: simple select with count join doesn't return count property at root in all client versions but usually as a property on the object array item.
   return {
     users: data?.map(u => ({...u, orders: (u.orders as any)?.[0]?.count || 0 })) || [],
     count: count || 0
@@ -200,7 +198,7 @@ export async function getAdminVendorsList(page = 1, limit = 50, search = '') {
   let query = supabase.from('vendors').select('*, products(count)', { count: 'exact' });
 
   if (search) {
-     query = query.or(\store_name.ilike.%\%\);
+     query = query.or(`store_name.ilike.%${search}%`);
   }
 
   const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
@@ -208,5 +206,61 @@ export async function getAdminVendorsList(page = 1, limit = 50, search = '') {
    return {
     vendors: data?.map(v => ({...v, products: (v.products as any)?.[0]?.count || 0 })) || [],
     count: count || 0
+  };
+}
+
+export async function getAdminProductsList(page = 1, limit = 20, search = '', status = 'all') {
+  const supabase = await createClient();
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  let query = supabase.from('products').select('*, vendor:vendors(store_name, is_verified)', { count: 'exact' });
+
+  if (search) {
+     query = query.or(`name.ilike.%${search}%,description.ilike.%${search}%`);
+  }
+
+  if (status !== 'all') {
+      query = query.eq('status', status);
+  }
+
+  const { data, count, error } = await query.order('created_at', { ascending: false }).range(from, to);
+   
+   return {
+    products: data || [],
+    count: count || 0
+  };
+}
+
+export async function updateProductStatus(productId: string, status: string, reason?: string) {
+    const supabase = await createClient();
+    
+    const { error } = await supabase.from('products').update({ status }).eq('id', productId);
+    
+    if (error) throw error;
+    revalidatePath('/admin/products');
+    return { success: true };
+}
+
+export async function getAdminOrdersList(page = 1, limit = 20, search = '', status = 'all') {
+  const supabase = await createClient();
+  const from = (page - 1) * limit;
+  const to = from + limit - 1;
+
+  let query = supabase.from('orders').select('*, customer:profiles!user_id(full_name, email)', { count: 'exact' });
+
+  if (search) {
+      query = query.ilike('order_number', `%${search}%`);
+  }
+
+  if (status !== 'all') {
+      query = query.eq('payment_status', status);
+  }
+
+  const { data, count } = await query.order('created_at', { ascending: false }).range(from, to);
+
+  return {
+      orders: data || [],
+      count: count || 0
   };
 }
