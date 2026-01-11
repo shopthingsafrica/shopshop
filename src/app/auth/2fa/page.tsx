@@ -18,7 +18,7 @@ import {
 import { Button, Input } from '@/components/ui';
 
 type TwoFactorMethod = 'authenticator' | 'sms' | 'email';
-type SetupStep = 'choose' | 'setup' | 'verify' | 'backup' | 'complete';
+type SetupStep = 'choose' | 'setup' | 'verify' | 'complete';
 
 export default function TwoFactorSetupPage() {
   const router = useRouter();
@@ -34,11 +34,6 @@ export default function TwoFactorSetupPage() {
   const [secret, setSecret] = useState('');
   const [qrCode, setQrCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-
-  // Mock backup codes for now as Supabase doesn't generate them natively in the same flow easily without extra implementation
-  // We will generate them optionally or just skip that step for MVP as Supabase MFA is the focus
-  const [backupCodes] = useState(Array.from({length: 8}, () => Math.random().toString(36).substr(2, 8).toUpperCase()));
-  const [copiedCodes, setCopiedCodes] = useState(false);
 
   const handleMethodSelect = async (selectedMethod: TwoFactorMethod) => {
     setMethod(selectedMethod);
@@ -86,12 +81,6 @@ export default function TwoFactorSetupPage() {
     await navigator.clipboard.writeText(secret);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const copyBackupCodes = async () => {
-    await navigator.clipboard.writeText(backupCodes.join('\n'));
-    setCopiedCodes(true);
-    setTimeout(() => setCopiedCodes(false), 2000);
   };
 
   const handleComplete = () => {
@@ -377,77 +366,6 @@ export default function TwoFactorSetupPage() {
                   </button>
                 </p>
               )}
-            </div>
-          )}
-
-          {/* Step 4: Backup Codes */}
-          {step === 'backup' && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-lg font-semibold">Save Your Backup Codes</h2>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Keep these codes in a safe place. You can use them to access your account if you lose your 2FA device.
-                </p>
-              </div>
-
-              <div className="bg-muted rounded-lg p-4">
-                <div className="grid grid-cols-2 gap-2">
-                  {backupCodes.map((code, i) => (
-                    <code key={i} className="bg-white px-3 py-2 rounded text-sm font-mono text-center">
-                      {code}
-                    </code>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex gap-3">
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={copyBackupCodes}
-                >
-                  {copiedCodes ? (
-                    <>
-                      <Check className="w-4 h-4 mr-2" />
-                      Copied!
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Copy Codes
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  className="flex-1"
-                  onClick={() => {
-                    const text = backupCodes.join('\n');
-                    const blob = new Blob([text], { type: 'text/plain' });
-                    const url = URL.createObjectURL(blob);
-                    const a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'shopthings-backup-codes.txt';
-                    a.click();
-                  }}
-                >
-                  Download
-                </Button>
-              </div>
-
-              <div className="bg-accent/10 border border-accent/20 rounded-lg p-4">
-                <p className="text-sm text-accent-foreground">
-                  <strong>Important:</strong> Each backup code can only be used once. Generate new codes from your security settings if you run out.
-                </p>
-              </div>
-
-              <Button
-                variant="primary"
-                className="w-full"
-                onClick={handleComplete}
-              >
-                I&apos;ve Saved My Codes
-              </Button>
             </div>
           )}
 
