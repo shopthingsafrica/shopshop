@@ -7,7 +7,6 @@ import { enrollTwoFactor, verifyTwoFactor } from '@/app/account/actions';
 import { 
   Shield, 
   Smartphone, 
-  Mail, 
   CheckCircle, 
   ArrowLeft,
   Copy,
@@ -17,7 +16,7 @@ import {
 } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
 
-type TwoFactorMethod = 'authenticator' | 'sms' | 'email';
+type TwoFactorMethod = 'authenticator';
 type SetupStep = 'choose' | 'setup' | 'verify' | 'complete';
 
 export default function TwoFactorSetupPage() {
@@ -281,15 +280,6 @@ export default function TwoFactorSetupPage() {
               >
                 {isLoading ? 'Verifying...' : 'Verify'}
               </Button>
-
-              {method !== 'authenticator' && (
-                <p className="text-center text-sm text-muted-foreground">
-                  Didn&apos;t receive the code?{' '}
-                  <button className="text-secondary hover:underline">
-                    Resend
-                  </button>
-                </p>
-              )}
             </div>
           )}
 
@@ -311,8 +301,7 @@ export default function TwoFactorSetupPage() {
                 <h3 className="font-medium mb-2">What happens next?</h3>
                 <ul className="text-sm text-muted-foreground space-y-2">
                   <li>• You&apos;ll be asked for a verification code when you sign in</li>
-                  <li>• Use your {method === 'authenticator' ? 'authenticator app' : method === 'sms' ? 'phone' : 'email'} to get codes</li>
-                  <li>• Use backup codes if you lose access to your {method === 'authenticator' ? 'authenticator' : method === 'sms' ? 'phone' : 'email'}</li>
+                  <li>• Use your authenticator app to get codes</li>
                 </ul>
               </div>
 
