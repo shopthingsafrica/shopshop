@@ -46,95 +46,7 @@ import {
 import { Button } from '@/components/ui';
 import { useCurrencyStore } from '@/stores';
 
-// Mock admin stats
-const STATS = [
-  {
-    label: 'Total Users',
-    value: '12,543',
-    change: '+12.5%',
-    trend: 'up',
-    icon: Users,
-    iconBg: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-  },
-  {
-    label: 'Active Vendors',
-    value: '856',
-    change: '+8.3%',
-    trend: 'up',
-    icon: Store,
-    iconBg: 'bg-green-100',
-    iconColor: 'text-green-600',
-  },
-  {
-    label: 'Total Products',
-    value: '45,231',
-    change: '+23.1%',
-    trend: 'up',
-    icon: Package,
-    iconBg: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-  },
-  {
-    label: 'Sales Volume',
-    value: 28500000,
-    change: '+15.7%',
-    trend: 'up',
-    icon: DollarSign,
-    iconBg: 'bg-yellow-100',
-    iconColor: 'text-yellow-600',
-    isCurrency: true,
-  },
-];
-
-// Mock pending items
-const PENDING_ITEMS = {
-  vendors: 12,
-  products: 34,
-  withdrawals: 8,
-  reports: 5,
-};
-
-// Mock recent activities
-const RECENT_ACTIVITIES = [
-  {
-    id: '1',
-    type: 'vendor_registered',
-    message: 'New vendor registration: Lagos Fashion Hub',
-    time: '5 minutes ago',
-    icon: Store,
-  },
-  {
-    id: '2',
-    type: 'product_submitted',
-    message: 'Product submitted for review: Traditional Kente Cloth',
-    time: '15 minutes ago',
-    icon: Package,
-  },
-  {
-    id: '3',
-    type: 'withdrawal_requested',
-    message: 'Withdrawal request: ₦150,000 from Accra Textiles',
-    time: '32 minutes ago',
-    icon: DollarSign,
-  },
-  {
-    id: '4',
-    type: 'vendor_verified',
-    message: 'Vendor verified: African Arts Gallery',
-    time: '1 hour ago',
-    icon: BadgeCheck,
-  },
-  {
-    id: '5',
-    type: 'order_completed',
-    message: 'Order #ORD-2024-001234 completed',
-    time: '2 hours ago',
-    icon: ShoppingBag,
-  },
-];
-
-// Mock top vendors
+// Top Vendors (Placeholder/Mock as it requires complex aggregation)
 const TOP_VENDORS = [
   { id: '1', name: 'Accra Textiles', sales: 4500000, products: 156, orders: 342 },
   { id: '2', name: 'Lagos Fashion Hub', sales: 3200000, products: 89, orders: 278 },
@@ -143,7 +55,7 @@ const TOP_VENDORS = [
   { id: '5', name: 'Addis Designs', sales: 1900000, products: 112, orders: 134 },
 ];
 
-// Mock user growth data for chart simulation
+// Mock user growth data for chart simulation (Placeholder)
 const USER_GROWTH = [
   { month: 'Aug', users: 8500 },
   { month: 'Sep', users: 9200 },
@@ -153,7 +65,8 @@ const USER_GROWTH = [
   { month: 'Jan', users: 12543 },
 ];
 
-// Mock System Health
+// Mock System Health (Placeholder)
+const SYSTEM_HEALTH = [
 const SYSTEM_HEALTH = [
   { label: 'API Latency', status: 'Healthy', value: '45ms', color: 'text-green-600', bg: 'bg-green-100', icon: Activity },
   { label: 'Database', status: 'Healthy', value: 'Connected', color: 'text-green-600', bg: 'bg-green-100', icon: Server },
