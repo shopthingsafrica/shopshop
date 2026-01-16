@@ -136,10 +136,9 @@ export default function AdminVendorsPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={\`r
-                  flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                  \
-                \}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white'
+                }`}
               >
                 <Icon className='w-5 h-5' />
                 <span>{item.label}</span>
@@ -264,7 +263,7 @@ export default function AdminVendorsPage() {
                             </div>
                           </td>
                           <td className='px-6 py-4'>
-                            <span className={\inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full capitalize \ \\}>
+                            <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded-full capitalize ${status.bg} ${status.text}`}>
                               <StatusIcon className='w-3.5 h-3.5' />
                               {vendor.status}
                             </span>

@@ -130,10 +130,9 @@ export default function AdminUsersPage() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={\`r
-                  flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                  \
-                \}
+                className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                  isActive ? 'bg-white/10 text-white' : 'text-white/60 hover:bg-white/5 hover:text-white'
+                }`}
               >
                 <Icon className='w-5 h-5' />
                 <span>{item.label}</span>
@@ -249,7 +248,9 @@ export default function AdminUsersPage() {
                           </div>
                         </td>
                         <td className='px-6 py-4'>
-                          <span className={\inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize \ \\}>
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full capitalize ${
+                            user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 'bg-blue-100 text-blue-800'
+                          }`}>
                             {user.role}
                           </span>
                         </td>
