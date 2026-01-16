@@ -116,6 +116,7 @@ export async function getAdminDashboardStats(): Promise<DashboardStats> {
           const wallet = wallets?.find(w => w.id === walletId);
           const sales = walletSalesMap.get(walletId) || 0;
           return {
+              // @ts-ignore
               id: wallet?.vendor?.id || walletId,
               // @ts-ignore
               name: wallet?.vendor?.store_name || 'Unknown Vendor',
