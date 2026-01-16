@@ -1,7 +1,9 @@
-import { createBrowserClient } from '@supabase/ssr';
+import { createBrowserClient, SupabaseClient } from '@supabase/ssr';
 import type { Database } from '@/types/database';
 
-export function createClient() {
+let client: SupabaseClient<Database> | undefined;
+
+function createSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
@@ -12,4 +14,13 @@ export function createClient() {
   }
 
   return createBrowserClient<Database>(supabaseUrl, supabaseAnonKey);
+}
+
+export function createClient() {
+  if (client) {
+    return client;
+  }
+  
+  client = createSupabaseClient();
+  return client;
 }
