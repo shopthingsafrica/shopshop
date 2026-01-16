@@ -22,6 +22,7 @@ export async function getUserProfile() {
     // Profile doesn't exist, create it from auth data
     const { data: newProfile, error: createError } = await supabase
       .from('profiles')
+      // @ts-ignore
       .insert({
         id: user.id,
         email: user.email!,
