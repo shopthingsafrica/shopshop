@@ -191,7 +191,7 @@ export default function OrdersPage() {
                       })}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {order.items.map((item, i) => (
+                      {order.items.map((item: any, i: number) => (
                         <span key={i}>
                           {item.name}
                           {item.quantity > 1 && ` ×${item.quantity}`}
