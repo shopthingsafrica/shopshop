@@ -207,11 +207,11 @@ What you can do:
 • Enjoy secure delivery to your doorstep
 • Get community support when you need it
 
-Ready to start shopping? Visit: ${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/products
+Ready to start shopping? Visit: ${EMAIL_CONFIG.baseUrl}/products
 
-Interested in selling? Apply to become a vendor: ${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/vendor/apply
+Interested in selling? Apply to become a vendor: ${EMAIL_CONFIG.baseUrl}/vendor/apply
 
-Need help? Visit our Help Center: ${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/help
+Need help? Visit our Help Center: ${EMAIL_CONFIG.baseUrl}/help
 
 Happy shopping!
 The ShopThings Africa Team
