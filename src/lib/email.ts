@@ -310,9 +310,9 @@ export async function sendOrderConfirmationEmail(data: OrderConfirmationData): P
                 <li>Your order will be delivered within 3-7 business days</li>
               </ul>
               
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/orders/${data.orderNumber}" class="button">Track Your Order</a>
+              <a href="${EMAIL_CONFIG.baseUrl}/orders/${data.orderNumber}" class="button">Track Your Order</a>
               
-              <p>Questions about your order? Contact our support team or check your <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/orders" style="color: #C1272D;">order history</a>.</p>
+              <p>Questions about your order? Contact our support team or check your <a href="${EMAIL_CONFIG.baseUrl}/orders" style="color: #C1272D;">order history</a>.</p>
               
               <p>Thank you for shopping with ShopThings Africa!<br>
               The ShopThings Team</p>
@@ -376,7 +376,7 @@ export async function sendVendorApprovalEmail(data: VendorApprovalData): Promise
                 <li>Start receiving orders</li>
               </ul>
               
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/vendor/dashboard" class="button">Access Vendor Dashboard</a>
+              <a href="${EMAIL_CONFIG.baseUrl}/vendor/dashboard" class="button">Access Vendor Dashboard</a>
               
               <p><strong>Getting Started Tips:</strong></p>
               <ul>
