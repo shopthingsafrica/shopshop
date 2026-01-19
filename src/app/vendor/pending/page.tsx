@@ -119,7 +119,7 @@ export default async function VendorPendingPage() {
 
           {/* Actions */}
           <div className="space-y-3">
-            <Link href="/dashboard" className="block">
+            <Link href="/vendor/dashboard" className="block">
               <Button variant="primary" fullWidth size="lg">
                 <ArrowLeft className="w-5 h-5 mr-2" />
                 Back to Dashboard
