@@ -107,34 +107,6 @@ async function sendEmail(template: EmailTemplate): Promise<{ success: boolean; e
     return { success: false, error: 'Failed to send email' };
   }
 }
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: FROM_EMAIL,
-        to: template.to,
-        subject: template.subject,
-        html: template.html,
-        text: template.text,
-      }),
-    });
-
-    if (!response.ok) {
-      const error = await response.text();
-      console.error('Email send failed:', error);
-      return { success: false, error: 'Failed to send email' };
-    }
-
-    const result = await response.json();
-    console.log('Email sent successfully:', result.id);
-    return { success: true };
-  } catch (error) {
-    console.error('Email send error:', error);
-    return { success: false, error: 'Failed to send email' };
-  }
-}
 
 /**
  * Welcome email for new users
@@ -200,11 +172,11 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<{ succes
               
               <p><strong>Ready to start shopping?</strong></p>
               
-              <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/products" class="button">Browse Products</a>
+              <a href="${EMAIL_CONFIG.baseUrl}/products" class="button">Browse Products</a>
               
-              <p>If you're interested in selling your products, you can also <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/vendor/apply" style="color: #C1272D;">apply to become a vendor</a>.</p>
+              <p>If you're interested in selling your products, you can also <a href="${EMAIL_CONFIG.baseUrl}/vendor/apply" style="color: #C1272D;">apply to become a vendor</a>.</p>
               
-              <p>Need help getting started? Check out our <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/help" style="color: #C1272D;">Help Center</a> or reply to this email.</p>
+              <p>Need help getting started? Check out our <a href="${EMAIL_CONFIG.baseUrl}/help" style="color: #C1272D;">Help Center</a> or reply to this email.</p>
               
               <p>Happy shopping!<br>
               The ShopThings Africa Team</p>
@@ -213,9 +185,9 @@ export async function sendWelcomeEmail(data: WelcomeEmailData): Promise<{ succes
             <div class="footer">
               <p>© 2026 ShopThings Africa. All rights reserved.</p>
               <p>
-                <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}" style="color: #666;">Visit Website</a> | 
-                <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/help" style="color: #666;">Help Center</a> | 
-                <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.africa'}/unsubscribe" style="color: #666;">Unsubscribe</a>
+                <a href="${EMAIL_CONFIG.baseUrl}" style="color: #666;">Visit Website</a> | 
+                <a href="${EMAIL_CONFIG.baseUrl}/help" style="color: #666;">Help Center</a> | 
+                <a href="${EMAIL_CONFIG.baseUrl}/unsubscribe" style="color: #666;">Unsubscribe</a>
               </p>
             </div>
           </div>
