@@ -102,11 +102,12 @@ export async function handleVendorStatusChange(vendorId: string, approved: boole
       .eq('id', vendorId)
       .single();
 
-    if (vendor && vendor.user) {
+    if (vendor && vendor.user && Array.isArray(vendor.user) && vendor.user.length > 0) {
+      const userProfile = vendor.user[0];
       await sendVendorApprovalEmail({
-        vendorName: vendor.user.full_name || 'Vendor',
+        vendorName: userProfile.full_name || 'Vendor',
         storeName: vendor.store_name,
-        email: vendor.user.email,
+        email: userProfile.email,
         approved,
         reason,
       });
