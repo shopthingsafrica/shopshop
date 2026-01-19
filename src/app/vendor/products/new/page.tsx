@@ -8,10 +8,7 @@ import {
   Package,
   ArrowLeft,
   Save,
-  Upload,
   X,
-  Plus,
-  GripVertical,
   ShoppingBag,
   BarChart3,
   Wallet,
@@ -22,10 +19,9 @@ import {
   LogOut,
   ExternalLink,
   BadgeCheck,
-  ImageIcon,
-  Trash2,
 } from 'lucide-react';
-import { Button, Input } from '@/components/ui';
+import { Button, Input, ImageUpload } from '@/components/ui';
+import { STORAGE_BUCKETS } from '@/lib/storage';
 
 // Mock vendor data
 const MOCK_VENDOR = {
@@ -59,7 +55,8 @@ export default function NewProductPage() {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [images, setImages] = useState<string[]>([]);
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const [imagePaths, setImagePaths] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -84,25 +81,42 @@ export default function NewProductPage() {
     }));
   };
 
-  const handleImageUpload = () => {
-    // Simulate image upload
-    const newImage = `/products/product-${Date.now()}.jpg`;
-    setImages(prev => [...prev, newImage]);
-  };
-
-  const handleRemoveImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (imageUrls.length === 0) {
+      alert('Please upload at least one product image');
+      return;
+    }
+    
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Redirect to products list
-    router.push('/vendor/products');
+    try {
+      // Prepare product data
+      const productData = {
+        ...formData,
+        images: imagePaths, // Store storage paths in database
+        price: parseFloat(formData.price),
+        compare_at_price: formData.compare_at_price ? parseFloat(formData.compare_at_price) : null,
+        stock_quantity: parseInt(formData.stock_quantity),
+      };
+      
+      console.log('Product data:', productData);
+      
+      // TODO: Call API to create product
+      // await createProduct(productData);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Redirect to products list
+      router.push('/vendor/products');
+    } catch (error) {
+      console.error('Failed to create product:', error);
+      alert('Failed to create product. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -283,50 +297,22 @@ export default function NewProductPage() {
 
                 {/* Images */}
                 <div className="bg-white rounded-xl shadow-sm p-6">
-                  <h2 className="font-heading font-bold text-primary mb-4">Product Images</h2>
+                  <h2 className="font-heading font-bold text-primary mb-4">Product Images *</h2>
                   
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {images.map((image, index) => (
-                      <div key={index} className="relative group aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                        <div className="w-full h-full flex items-center justify-center">
-                          <ImageIcon className="w-8 h-8 text-gray-400" />
-                        </div>
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                          <button
-                            type="button"
-                            className="p-2 bg-white rounded-lg hover:bg-gray-100"
-                          >
-                            <GripVertical className="w-4 h-4" />
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveImage(index)}
-                            className="p-2 bg-white rounded-lg hover:bg-gray-100 text-red-600"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                        {index === 0 && (
-                          <span className="absolute top-2 left-2 px-2 py-1 bg-secondary text-white text-xs font-medium rounded">
-                            Main
-                          </span>
-                        )}
-                      </div>
-                    ))}
-                    
-                    <button
-                      type="button"
-                      onClick={handleImageUpload}
-                      className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center hover:border-secondary hover:bg-secondary/5 transition-colors"
-                    >
-                      <Upload className="w-8 h-8 text-gray-400 mb-2" />
-                      <span className="text-sm text-muted-foreground">Add Image</span>
-                    </button>
-                  </div>
+                  <ImageUpload
+                    bucket={STORAGE_BUCKETS.PRODUCTS}
+                    path={MOCK_VENDOR.id}
+                    multiple
+                    maxFiles={10}
+                    value={imageUrls}
+                    onChange={(urls) => setImageUrls(urls as string[])}
+                    onPathsChange={(paths) => setImagePaths(paths as string[])}
+                    compress
+                  />
                   
                   <p className="text-sm text-muted-foreground mt-4">
                     Upload up to 10 images. First image will be the main product image. 
-                    Drag to reorder. Recommended size: 1000x1000px
+                    Recommended size: 1000x1000px. Maximum 5MB per image.
                   </p>
                 </div>
 
