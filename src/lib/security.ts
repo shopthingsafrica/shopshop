@@ -3,7 +3,21 @@
  */
 
 import { NextRequest } from 'next/server';
-import DOMPurify from 'isomorphic-dompurify';
+
+// Lazy import DOMPurify to avoid issues in edge runtime
+let DOMPurify: any = null;
+
+async function getDOMPurify() {
+  if (!DOMPurify && typeof window !== 'undefined') {
+    try {
+      const { default: purify } = await import('isomorphic-dompurify');
+      DOMPurify = purify;
+    } catch (error) {
+      console.warn('DOMPurify not available:', error);
+    }
+  }
+  return DOMPurify;
+}
 
 // Rate limiting store (in production, use Redis or similar)
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
