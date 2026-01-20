@@ -7,6 +7,7 @@ import { AuthProvider } from "@/components/providers";
 import { ErrorBoundary } from "@/lib/error-tracking";
 import { ErrorTrackingSetup } from "@/components/ErrorTrackingSetup";
 import { WebsiteStructuredData } from "@/components/StructuredData";
+import { PerformanceSetup } from "@/components/PerformanceSetup";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -120,6 +121,7 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <ErrorTrackingSetup />
+          <PerformanceSetup />
           <WebsiteStructuredData />
           <AuthProvider>
             <Header />
