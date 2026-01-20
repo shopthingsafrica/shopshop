@@ -44,7 +44,7 @@ min_password_length = 8
 enabled = true
 
 [auth.external.apple]
-enabled = true
+enabled = false
 
 [storage]
 # S3 protocol access
