@@ -1,48 +1,20 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import {
-  Store,
-  Package,
-  ShoppingBag,
-  BarChart3,
-  Users,
-  Settings,
-  Home,
-  Menu,
-  X,
-  LogOut,
-  Shield,
   Search,
   Download,
-  MoreVertical,
-  Calendar,
-  CreditCard,
-  Truck,
+  ShoppingBag,
   CheckCircle,
   XCircle,
   Clock,
-  AlertCircle
+  AlertCircle,
+  X,
 } from 'lucide-react';
 import { Button, Input } from '@/components/ui';
+import { AdminLayout } from '@/components/admin';
 import { useCurrencyStore } from '@/stores';
 import { getAdminOrdersList, getAdminDashboardStats, DashboardStats } from '../actions';
-
-const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: Home },
-  { label: 'Users', href: '/admin/users', icon: Users },
-  { label: 'Vendors', href: '/admin/vendors', icon: Store },
-  { label: 'Products', href: '/admin/products', icon: Package },
-  { label: 'Orders', href: '/admin/orders', icon: ShoppingBag },
-  { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-  { label: 'Reports', href: '/admin/reports', icon: FileText },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
-];
-
-// Placeholder component for FileText as it was missing from lucide-react imports in previous file too, but works if imported?
-// Actually FileText is in lucide-react.
-import { FileText } from 'lucide-react';
 
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; icon: any }> = {
   completed: { label: 'Paid', bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
@@ -53,7 +25,6 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; i
 
 export default function AdminOrdersPage() {
   const { formatConvertedPrice } = useCurrencyStore();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [orders, setOrders] = useState<any[]>([]);
@@ -61,7 +32,6 @@ export default function AdminOrdersPage() {
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [stats, setStats] = useState<DashboardStats | null>(null);
-
   const [selectedOrder, setSelectedOrder] = useState<string | null>(null);
 
   const fetchOrders = async () => {
@@ -87,112 +57,15 @@ export default function AdminOrdersPage() {
 
   const selectedOrderData = orders.find(o => o.id === selectedOrder);
 
+  const headerActions = (
+    <Button variant='outline'>
+      <Download className='w-4 h-4 mr-2' />
+      Export CSV
+    </Button>
+  );
+
   return (
-    <div className='min-h-screen bg-gray-50'>
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className='fixed inset-0 bg-black/50 z-40 lg:hidden'
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`
-          fixed top-0 left-0 z-50 h-full w-64 bg-primary text-white transform transition-transform duration-200 ease-in-out
-          lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
-        <div className='flex items-center justify-between p-4 border-b border-white/10'>
-            <Link href='/' className='flex items-center gap-2'>
-            <Store className='w-8 h-8 text-secondary' />
-            <span className='font-heading font-bold text-lg'>
-                Shop<span className='text-secondary'>Things</span>
-            </span>
-            </Link>
-            <button
-            onClick={() => setSidebarOpen(false)}
-            className='lg:hidden p-1 hover:bg-white/10 rounded'
-            >
-            <X className='w-5 h-5' />
-            </button>
-        </div>
-
-        {/* Admin Badge */}
-        <div className='p-4 border-b border-white/10'>
-            <div className='flex items-center gap-3'>
-            <div className='w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center'>
-                <Shield className='w-5 h-5 text-red-400' />
-            </div>
-            <div className='flex-1 min-w-0'>
-                <p className='font-medium'>Admin Panel</p>
-                <p className='text-xs text-white/60'>Super Administrator</p>
-            </div>
-            </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className='p-4 space-y-1'>
-            {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const isActive = item.href === '/admin/orders';
-            return (
-                <Link
-                key={item.href}
-                href={item.href}
-                className={`
-                    flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                    ${isActive ? 'bg-secondary text-white' : 'text-white/80 hover:bg-white/10'}
-                `}
-                >
-                <Icon className='w-5 h-5' />
-                <span>{item.label}</span>
-                </Link>
-            );
-            })}
-        </nav>
-
-        {/* Bottom Actions */}
-        <div className='absolute bottom-0 left-0 right-0 p-4 border-t border-white/10'>
-            <Link
-            href='/'
-            className='flex items-center gap-3 px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition-colors'
-            >
-            <Store className='w-5 h-5' />
-            <span>View Store</span>
-            </Link>
-            <button className='flex items-center gap-3 px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition-colors w-full'>
-            <LogOut className='w-5 h-5' />
-            <span>Log Out</span>
-            </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className='lg:ml-64'>
-        {/* Top Header */}
-        <header className='bg-white border-b sticky top-0 z-30'>
-          <div className='flex items-center justify-between px-4 lg:px-6 py-4'>
-            <div className='flex items-center gap-4'>
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className='lg:hidden p-2 hover:bg-gray-100 rounded-lg'
-              >
-                <Menu className='w-5 h-5' />
-              </button>
-              <h1 className='text-xl font-heading font-bold text-primary'>Orders Management</h1>
-            </div>
-
-            <Button variant='outline'>
-              <Download className='w-4 h-4 mr-2' />
-              Export CSV
-            </Button>
-          </div>
-        </header>
-
-        {/* Content */}
-        <main className='p-4 lg:p-6'>
+    <AdminLayout title="Orders Management" headerActions={headerActions}>
           {/* Stats */}
             <div className='grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6'>
             <div className='bg-white rounded-xl p-4 shadow-sm'>
