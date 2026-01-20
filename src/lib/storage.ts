@@ -2,8 +2,17 @@ import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
 
+export type StorageBucket = 'products' | 'vendors' | 'categories' | 'avatars';
+
+export const STORAGE_BUCKETS = {
+  products: 'products',
+  vendors: 'vendors', 
+  categories: 'categories',
+  avatars: 'avatars',
+} as const;
+
 export interface UploadOptions {
-  bucket: 'products' | 'vendors' | 'categories' | 'avatars';
+  bucket: StorageBucket;
   folder?: string;
   maxSize?: number; // in bytes
   allowedTypes?: string[];
@@ -14,6 +23,21 @@ export interface UploadResult {
   url?: string;
   path?: string;
   error?: string;
+}
+
+export interface SingleUploadResult {
+  url: string;
+  path: string;
+}
+
+export interface SingleUploadError {
+  error: string;
+}
+
+export interface MultipleUploadResult {
+  urls: string[];
+  paths: string[];
+  errors: string[];
 }
 
 // Default configurations for each bucket
@@ -126,6 +150,23 @@ export async function uploadFile(
 }
 
 /**
+ * Upload single image (legacy function for compatibility)
+ */
+export async function uploadImage(
+  file: File,
+  bucket: StorageBucket,
+  folder?: string
+): Promise<SingleUploadResult | SingleUploadError> {
+  const result = await uploadFile(file, { bucket, folder });
+  
+  if (result.success && result.url && result.path) {
+    return { url: result.url, path: result.path };
+  } else {
+    return { error: result.error || 'Upload failed' };
+  }
+}
+
+/**
  * Upload multiple files
  */
 export async function uploadMultipleFiles(
@@ -137,6 +178,32 @@ export async function uploadMultipleFiles(
   );
   
   return results;
+}
+
+/**
+ * Upload multiple images (legacy function for compatibility)
+ */
+export async function uploadMultipleImages(
+  files: File[],
+  bucket: StorageBucket,
+  folder?: string
+): Promise<MultipleUploadResult> {
+  const results = await uploadMultipleFiles(files, { bucket, folder });
+  
+  const urls: string[] = [];
+  const paths: string[] = [];
+  const errors: string[] = [];
+  
+  results.forEach(result => {
+    if (result.success && result.url && result.path) {
+      urls.push(result.url);
+      paths.push(result.path);
+    } else if (result.error) {
+      errors.push(result.error);
+    }
+  });
+  
+  return { urls, paths, errors };
 }
 
 /**
@@ -162,6 +229,13 @@ export async function deleteFile(
       error: error instanceof Error ? error.message : 'Delete failed' 
     };
   }
+}
+
+/**
+ * Delete image (legacy function for compatibility)
+ */
+export async function deleteImage(bucket: StorageBucket, path: string): Promise<void> {
+  await deleteFile(bucket, path);
 }
 
 /**
