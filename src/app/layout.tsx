@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header, LiveChatSupport } from "@/components/layout";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import { AuthProvider } from "@/components/providers";
-import { ErrorBoundary } from "@/lib/error-tracking";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ErrorTrackingSetup } from "@/components/ErrorTrackingSetup";
 import { WebsiteStructuredData } from "@/components/StructuredData";
 import { PerformanceSetup } from "@/components/PerformanceSetup";
