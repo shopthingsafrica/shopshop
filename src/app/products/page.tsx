@@ -139,7 +139,7 @@ function ProductsContent() {
             {searchQuery ? `Search Results for "${searchQuery}"` : 'All Products'}
           </h1>
           <p className="text-muted-foreground">
-            {filteredProducts.length} products found
+            {totalProducts} products found
           </p>
         </div>
 
@@ -244,6 +244,7 @@ function ProductsContent() {
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="border border-border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+                  aria-label="Sort products by"
                 >
                   {SORT_OPTIONS.map(option => (
                     <option key={option.value} value={option.value}>
@@ -314,13 +315,13 @@ function ProductsContent() {
                   <div key={i} className="h-96 bg-gray-100 animate-pulse rounded-lg"></div>
                 ))}
               </div>
-            ) : filteredProducts.length > 0 ? (
+            ) : products.length > 0 ? (
               <div className={
                 viewMode === 'grid' 
                   ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'
                   : 'space-y-4'
               }>
-                {filteredProducts.map(product => (
+                {products.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}
               </div>
