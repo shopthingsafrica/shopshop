@@ -62,7 +62,8 @@ export async function handleOrderCreated(orderId: string) {
     if (order && order.customer) {
       await sendOrderConfirmationEmail({
         orderNumber: order.order_number,
-        customerName: order.customer.email, // Use email as recipient
+        customerName: order.customer.full_name || 'Customer',
+        email: order.customer.email,
         total: order.total,
         currency: order.currency,
         items: order.items?.map((item: any) => ({
