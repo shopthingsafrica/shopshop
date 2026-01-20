@@ -6,13 +6,42 @@
 export function trackWebVitals() {
   if (typeof window === 'undefined') return;
 
-  // Track Core Web Vitals
-  import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-    getCLS(sendToAnalytics);
-    getFID(sendToAnalytics);
-    getFCP(sendToAnalytics);
-    getLCP(sendToAnalytics);
-    getTTFB(sendToAnalytics);
+  // Track Core Web Vitals with updated API
+  import('web-vitals').then((webVitals) => {
+    if (webVitals.onCLS) {
+      webVitals.onCLS(sendToAnalytics);
+    }
+    if (webVitals.onFID) {
+      webVitals.onFID(sendToAnalytics);
+    }
+    if (webVitals.onFCP) {
+      webVitals.onFCP(sendToAnalytics);
+    }
+    if (webVitals.onLCP) {
+      webVitals.onLCP(sendToAnalytics);
+    }
+    if (webVitals.onTTFB) {
+      webVitals.onTTFB(sendToAnalytics);
+    }
+    
+    // Also try the older API as fallback
+    if (webVitals.getCLS) {
+      webVitals.getCLS(sendToAnalytics);
+    }
+    if (webVitals.getFID) {
+      webVitals.getFID(sendToAnalytics);
+    }
+    if (webVitals.getFCP) {
+      webVitals.getFCP(sendToAnalytics);
+    }
+    if (webVitals.getLCP) {
+      webVitals.getLCP(sendToAnalytics);
+    }
+    if (webVitals.getTTFB) {
+      webVitals.getTTFB(sendToAnalytics);
+    }
+  }).catch((error) => {
+    console.warn('Web Vitals not available:', error);
   });
 }
 
