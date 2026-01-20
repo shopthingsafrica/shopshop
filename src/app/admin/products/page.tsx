@@ -146,17 +146,6 @@ const MOCK_PRODUCTS = [
   },
 ];
 
-const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/admin/dashboard', icon: Home },
-  { label: 'Users', href: '/admin/users', icon: Users },
-  { label: 'Vendors', href: '/admin/vendors', icon: Store },
-  { label: 'Products', href: '/admin/products', icon: Package },
-  { label: 'Orders', href: '/admin/orders', icon: ShoppingBag },
-  { label: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
-  { label: 'Reports', href: '/admin/reports', icon: FileText },
-  { label: 'Settings', href: '/admin/settings', icon: Settings },
-];
-
 const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; icon: React.ElementType }> = {
   pending_review: { label: 'Pending Review', bg: 'bg-yellow-100', text: 'text-yellow-800', icon: Clock },
   approved: { label: 'Approved', bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
@@ -166,7 +155,6 @@ const STATUS_CONFIG: Record<string, { label: string; bg: string; text: string; i
 
 export default function AdminProductsPage() {
   const { formatConvertedPrice } = useCurrencyStore();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
@@ -185,7 +173,6 @@ export default function AdminProductsPage() {
   });
 
   const getProduct = (id: string) => MOCK_PRODUCTS.find(p => p.id === id);
-
   const pendingProducts = MOCK_PRODUCTS.filter(p => p.status === 'pending_review');
 
   const handleApprove = (productId: string) => {
@@ -205,119 +192,15 @@ export default function AdminProductsPage() {
     setReasonText('');
   };
 
+  const headerActions = (
+    <Button variant="outline">
+      <Download className="w-4 h-4 mr-2" />
+      Export
+    </Button>
+  );
+
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Mobile Sidebar Overlay */}
-      {sidebarOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
-
-      {/* Sidebar */}
-      <aside
-        className={`
-          fixed top-0 left-0 z-50 h-full w-64 bg-primary text-white transform transition-transform duration-200 ease-in-out
-          lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
-        `}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
-          <Link href="/" className="flex items-center gap-2">
-            <Store className="w-8 h-8 text-secondary" />
-            <span className="font-heading font-bold text-lg">
-              Shop<span className="text-secondary">Things</span>
-            </span>
-          </Link>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden p-1 hover:bg-white/10 rounded"
-            aria-label="Close sidebar"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Admin Badge */}
-        <div className="p-4 border-b border-white/10">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-red-500/20 rounded-full flex items-center justify-center">
-              <Shield className="w-5 h-5 text-red-400" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium">Admin Panel</p>
-              <p className="text-xs text-white/60">Super Administrator</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation */}
-        <nav className="p-4 space-y-1">
-          {NAV_ITEMS.map((item) => {
-            const Icon = item.icon;
-            const isActive = item.href === '/admin/products';
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`
-                  flex items-center gap-3 px-3 py-2 rounded-lg transition-colors
-                  ${isActive ? 'bg-secondary text-white' : 'text-white/80 hover:bg-white/10'}
-                `}
-              >
-                <Icon className="w-5 h-5" />
-                <span>{item.label}</span>
-                {item.label === 'Products' && pendingProducts.length > 0 && (
-                  <span className="ml-auto bg-yellow-500 text-xs px-2 py-0.5 rounded-full">
-                    {pendingProducts.length}
-                  </span>
-                )}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Bottom Actions */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
-          <Link
-            href="/"
-            className="flex items-center gap-3 px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <Store className="w-5 h-5" />
-            <span>View Store</span>
-          </Link>
-          <button className="flex items-center gap-3 px-3 py-2 text-white/80 hover:bg-white/10 rounded-lg transition-colors w-full">
-            <LogOut className="w-5 h-5" />
-            <span>Log Out</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content */}
-      <div className="lg:ml-64">
-        {/* Top Header */}
-        <header className="bg-white border-b sticky top-0 z-30">
-          <div className="flex items-center justify-between px-4 lg:px-6 py-4">
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setSidebarOpen(true)}
-                className="lg:hidden p-2 hover:bg-gray-100 rounded-lg"
-                aria-label="Open sidebar"
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-              <h1 className="text-xl font-heading font-bold text-primary">Product Moderation</h1>
-            </div>
-
-            <Button variant="outline">
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          </div>
-        </header>
-
-        {/* Content */}
-        <main className="p-4 lg:p-6">
+    <AdminLayout title="Product Moderation" headerActions={headerActions}>
           {/* Stats */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-xl p-4 shadow-sm">
