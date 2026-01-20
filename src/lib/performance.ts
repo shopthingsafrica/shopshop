@@ -6,43 +6,35 @@
 export function trackWebVitals() {
   if (typeof window === 'undefined') return;
 
-  // Track Core Web Vitals with updated API
-  import('web-vitals').then((webVitals) => {
-    if (webVitals.onCLS) {
-      webVitals.onCLS(sendToAnalytics);
-    }
-    if (webVitals.onFID) {
-      webVitals.onFID(sendToAnalytics);
-    }
-    if (webVitals.onFCP) {
-      webVitals.onFCP(sendToAnalytics);
-    }
-    if (webVitals.onLCP) {
-      webVitals.onLCP(sendToAnalytics);
-    }
-    if (webVitals.onTTFB) {
-      webVitals.onTTFB(sendToAnalytics);
-    }
-    
-    // Also try the older API as fallback
-    if (webVitals.getCLS) {
-      webVitals.getCLS(sendToAnalytics);
-    }
-    if (webVitals.getFID) {
-      webVitals.getFID(sendToAnalytics);
-    }
-    if (webVitals.getFCP) {
-      webVitals.getFCP(sendToAnalytics);
-    }
-    if (webVitals.getLCP) {
-      webVitals.getLCP(sendToAnalytics);
-    }
-    if (webVitals.getTTFB) {
-      webVitals.getTTFB(sendToAnalytics);
-    }
-  }).catch((error) => {
-    console.warn('Web Vitals not available:', error);
-  });
+  // Track Core Web Vitals with proper v4+ API and error handling
+  import('web-vitals')
+    .then((webVitalsModule) => {
+      // Check if the functions exist before calling them
+      const { onCLS, onFCP, onINP, onLCP, onTTFB } = webVitalsModule;
+      
+      if (typeof onCLS === 'function') {
+        onCLS(sendToAnalytics);
+      }
+      if (typeof onFCP === 'function') {
+        onFCP(sendToAnalytics);
+      }
+      if (typeof onINP === 'function') {
+        onINP(sendToAnalytics); // INP replaced FID in v4+
+      }
+      if (typeof onLCP === 'function') {
+        onLCP(sendToAnalytics);
+      }
+      if (typeof onTTFB === 'function') {
+        onTTFB(sendToAnalytics);
+      }
+      
+      console.log('Web Vitals tracking initialized successfully');
+    })
+    .catch((error) => {
+      console.warn('Web Vitals not available:', error);
+      // Fallback: disable web vitals tracking
+      console.log('Performance monitoring will continue without Web Vitals');
+    });
 }
 
 function sendToAnalytics(metric: any) {

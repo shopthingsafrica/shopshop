@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export interface ErrorContext {
   userId?: string;

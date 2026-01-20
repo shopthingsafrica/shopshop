@@ -46,31 +46,59 @@ export async function signUp(data: SignUpData): Promise<AuthResult> {
 export async function signIn(data: SignInData): Promise<AuthResult> {
   const supabase = await createClient();
   
-  const { data: authData, error } = await supabase.auth.signInWithPassword({
-    email: data.email,
-    password: data.password,
-  });
-  
-  if (error) {
-    return { error: error.message };
-  }
-  
-  // Check if user has 2FA enabled
-  if (authData.user) {
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select('two_factor_enabled')
-      .eq('id', authData.user.id)
-      .single<{ two_factor_enabled: boolean }>();
+  try {
+    const { data: authData, error } = await supabase.auth.signInWithPassword({
+      email: data.email,
+      password: data.password,
+    });
     
-    if (!profileError && profile?.two_factor_enabled === true) {
-      // Sign out and require OTP verification
-      await supabase.auth.signOut();
-      return { requiresOtp: true };
+    if (error) {
+      // Handle specific error types
+      if (error.message.includes('Invalid login credentials')) {
+        return { error: 'Invalid email or password. Please check your credentials and try again.' };
+      }
+      if (error.message.includes('Email not confirmed')) {
+        return { error: 'Please check your email and click the confirmation link before signing in.' };
+      }
+      return { error: error.message };
     }
+    
+    // Check if user has 2FA enabled
+    if (authData.user) {
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('two_factor_enabled')
+          .eq('id', authData.user.id)
+          .single<{ two_factor_enabled: boolean }>();
+        
+        if (!profileError && profile?.two_factor_enabled === true) {
+          // Sign out and require OTP verification
+          await supabase.auth.signOut();
+          return { requiresOtp: true };
+        }
+      } catch (profileErr) {
+        console.warn('Failed to check 2FA status:', profileErr);
+        // Continue with login even if 2FA check fails
+      }
+    }
+    
+    return { success: true };
+  } catch (err) {
+    console.error('Sign in error:', err);
+    
+    // Handle network errors
+    if (err instanceof Error) {
+      if (err.message.includes('fetch failed') || err.message.includes('ECONNRESET')) {
+        return { error: 'Network connection error. Please check your internet connection and try again.' };
+      }
+      if (err.message.includes('timeout')) {
+        return { error: 'Request timed out. Please try again.' };
+      }
+    }
+    
+    return { error: 'An unexpected error occurred. Please try again.' };
   }
-  
-  return { success: true };
 }
 
 export async function signOut(): Promise<void> {
