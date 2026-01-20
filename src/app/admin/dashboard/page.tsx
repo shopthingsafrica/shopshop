@@ -876,12 +876,11 @@ export default function AdminDashboardPage() {
                 className="flex flex-col items-center gap-2 p-4 rounded-lg border-2 border-dashed hover:border-secondary hover:bg-secondary/5 transition-colors"
               >
                 <Settings className="w-6 h-6 text-gray-400" />
-                <span className="text-sm font-medium text-center">Platform Settings</span>
+                <span className="text-sm font-medium text-center">Settings</span>
               </Link>
             </div>
           </div>
-        </main>
-      </div>
-    </div>
-  );
+        </div>
+      </AdminLayout>
+    );
 }
