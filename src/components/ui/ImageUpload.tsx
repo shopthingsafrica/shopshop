@@ -150,6 +150,7 @@ export function ImageUpload({
             multiple={multiple}
             onChange={(e) => handleFileSelect(e.target.files)}
             className="hidden"
+            aria-label="Upload images"
           />
 
           {uploading ? (

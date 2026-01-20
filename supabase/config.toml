@@ -6,9 +6,6 @@ name = "ShopThings Marketplace"
 # Port to use for the local database URL
 port = 54322
 
-# Port to use for the local DB diff tool
-diff_port = 54323
-
 [studio]
 # Port to use for Supabase Studio
 port = 54333
@@ -30,15 +27,9 @@ jwt_expiry = 3600
 # Enable email signup
 enable_signup = true
 
-# Email OTP expiration time in seconds (5 minutes)
-otp_expiry = 300
-
 [auth.email]
 # Enable email confirmation
 enable_confirmations = true
-
-# Minimum password length
-min_password_length = 8
 
 [auth.external.google]
 enabled = true
@@ -47,29 +38,4 @@ enabled = true
 enabled = false
 
 [storage]
-# S3 protocol access
-s3_protocol_access = true
-
-[[storage.buckets]]
-name = "avatars"
-public = true
-file_size_limit = "2MB"
-allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
-
-[[storage.buckets]]
-name = "products"
-public = true
-file_size_limit = "5MB"
-allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
-
-[[storage.buckets]]
-name = "vendors"
-public = true
-file_size_limit = "5MB"
-allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
-
-[[storage.buckets]]
-name = "categories"
-public = true
-file_size_limit = "2MB"
-allowed_mime_types = ["image/jpeg", "image/png", "image/webp"]
+# Storage configuration will be handled by migrations
