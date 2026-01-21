@@ -81,11 +81,14 @@ export default function AdminUserEditPage() {
     setIsSaving(true);
 
     try {
-      // In production, you'd call your API to update the user
-      console.log('Updating user:', userId, formData);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await updateUserProfile(userId, {
+        full_name: formData.full_name,
+        email: formData.email,
+        role: formData.role,
+        phone: formData.phone,
+        bio: formData.bio,
+        avatar_url: formData.avatar_url,
+      });
       
       alert('User updated successfully!');
       router.push(`/admin/users/${userId}`);
