@@ -58,6 +58,10 @@ function ProductsContent() {
   const [totalProducts, setTotalProducts] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
 
+  const productsPerPage = 12;
+  const searchQuery = searchParams.get('search') || '';
+  const categorySlug = searchParams.get('category') || '';
+
   // Fetch products with search and filters
   useEffect(() => {
     async function fetchProducts() {
@@ -86,11 +90,6 @@ function ProductsContent() {
     }
     fetchProducts();
   }, [searchQuery, categorySlug, priceRange, verifiedOnly, sortBy, currentPage]);
-  
-  const productsPerPage = 12;
-
-  const searchQuery = searchParams.get('search') || '';
-  const categorySlug = searchParams.get('category') || '';
 
   // Filter and sort products - now handled by searchProducts
   const filteredProducts = products; // Products are already filtered by the search function

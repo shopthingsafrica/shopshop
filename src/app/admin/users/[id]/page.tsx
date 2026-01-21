@@ -202,7 +202,9 @@ export default function AdminUserProfilePage() {
                     {user.full_name || 'No Name'}
                   </h1>
                   {user.is_suspended && (
-                    <AlertTriangle className="w-6 h-6 text-red-500" title="Suspended" />
+                    <div className="flex items-center" title="Suspended">
+                      <AlertTriangle className="w-6 h-6 text-red-500" />
+                    </div>
                   )}
                 </div>
 

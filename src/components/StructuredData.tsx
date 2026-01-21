@@ -13,7 +13,7 @@ export function ProductStructuredData({ product }: ProductStructuredDataProps) {
     "name": product.name,
     "description": product.description,
     "image": product.images || [],
-    "sku": product.sku,
+    "sku": product.id,
     "brand": {
       "@type": "Brand",
       "name": product.vendor?.store_name || "ShopThings Vendor"
@@ -39,11 +39,6 @@ export function ProductStructuredData({ product }: ProductStructuredDataProps) {
       "worstRating": 1
     } : undefined,
     "category": product.category?.name,
-    "weight": product.weight ? {
-      "@type": "QuantitativeValue",
-      "value": product.weight,
-      "unitCode": "KGM"
-    } : undefined,
     "additionalProperty": [
       {
         "@type": "PropertyValue",

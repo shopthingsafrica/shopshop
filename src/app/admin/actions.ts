@@ -372,16 +372,22 @@ export async function getAdminUserById(userId: string) {
     .from('profiles')
     .select(`
       *,
-      orders:orders(count),
-      total_spent:orders(total).eq(payment_status, 'completed')
+      orders:orders(count)
     `)
     .eq('id', userId)
     .single();
   
   if (error) throw error;
   
+  // Get completed orders separately to calculate total spent
+  const { data: completedOrders } = await supabase
+    .from('orders')
+    .select('total')
+    .eq('user_id', userId)
+    .eq('payment_status', 'completed');
+  
   // Calculate total spent
-  const totalSpent = data.total_spent?.reduce((sum: number, order: any) => sum + (order.total || 0), 0) || 0;
+  const totalSpent = completedOrders?.reduce((sum: number, order: any) => sum + (order.total || 0), 0) || 0;
   const orderCount = (data.orders as any)?.[0]?.count || 0;
   
   return {

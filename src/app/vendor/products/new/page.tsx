@@ -300,7 +300,7 @@ export default function NewProductPage() {
                   <h2 className="font-heading font-bold text-primary mb-4">Product Images *</h2>
                   
                   <ImageUpload
-                    bucket={STORAGE_BUCKETS.PRODUCTS}
+                    bucket={STORAGE_BUCKETS.products}
                     path={MOCK_VENDOR.id}
                     multiple
                     maxFiles={10}

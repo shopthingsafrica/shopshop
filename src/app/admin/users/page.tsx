@@ -366,7 +366,9 @@ export default function AdminUsersPage() {
                           <div className='font-medium text-gray-900 flex items-center gap-2'>
                             {user.full_name || 'No Name'}
                             {user.is_suspended && (
-                              <AlertTriangle className="w-4 h-4 text-red-500" title="Suspended" />
+                              <div className="inline-flex items-center ml-2" title="Suspended">
+                                <AlertTriangle className="w-4 h-4 text-red-500" />
+                              </div>
                             )}
                           </div>
                           <div className='text-sm text-gray-500'>{user.email}</div>

@@ -11,7 +11,9 @@ const limiter = rateLimit({
 export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting
-    const identifier = request.ip || 'anonymous';
+    const identifier = request.headers.get('x-forwarded-for') || 
+                      request.headers.get('x-real-ip') || 
+                      'anonymous';
     const { success } = await limiter.check(10, identifier); // 10 errors per minute per IP
     
     if (!success) {
@@ -31,7 +33,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
     
     // Check if error already exists
     const { data: existingError } = await supabase
@@ -79,7 +81,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     
     // Check if user is admin
     const { data: { user } } = await supabase.auth.getUser();

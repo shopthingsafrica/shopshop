@@ -3,7 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://shopthings.com';
-  const supabase = createClient();
+  const supabase = await createClient();
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
