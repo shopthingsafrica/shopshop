@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { Button, Input, Select } from '@/components/ui';
 import { AdminLayout } from '@/components/admin';
+import { getAdminUserById, updateUserProfile } from '../../actions';
 
 interface UserEditForm {
   full_name: string;
@@ -43,19 +44,18 @@ export default function AdminUserEditPage() {
   const fetchUserData = async () => {
     setIsLoading(true);
     try {
-      // For now, we'll create mock user data
-      // In production, you'd fetch from your API
-      const mockUser: UserEditForm = {
-        full_name: 'John Doe',
-        email: 'john.doe@example.com',
-        role: 'buyer',
-        phone: '+1234567890',
-        bio: 'A loyal customer who loves shopping for authentic African products.',
-      };
-      
-      setFormData(mockUser);
+      const userData = await getAdminUserById(userId);
+      setFormData({
+        full_name: userData.full_name || '',
+        email: userData.email || '',
+        role: userData.role || 'buyer',
+        phone: userData.phone || '',
+        bio: userData.bio || '',
+        avatar_url: userData.avatar_url || '',
+      });
     } catch (error) {
       console.error('Failed to fetch user data:', error);
+      alert('Failed to load user data. Please try again.');
     } finally {
       setIsLoading(false);
     }
