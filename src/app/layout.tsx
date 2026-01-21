@@ -92,12 +92,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.svg', type: 'image/svg+xml' },
-      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/images/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/images/logo.png', sizes: '16x16', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
+    shortcut: '/images/logo.png',
     apple: [
-      { url: '/favicon.svg', sizes: '180x180', type: 'image/svg+xml' },
+      { url: '/images/logo.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   manifest: '/site.webmanifest',

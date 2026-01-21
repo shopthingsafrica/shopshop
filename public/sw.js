@@ -13,8 +13,6 @@ const STATIC_FILES = [
   '/images/hero/herosection1.png',
   '/images/hero/herosection2.png',
   '/site.webmanifest',
-  '/favicon-32x32.png',
-  '/favicon-16x16.png',
 ];
 
 // API routes to cache
